@@ -6,7 +6,7 @@ class CreateCrowdLevels < ActiveRecord::Migration[5.1]
       t.string :day
       t.integer :density
 
-      t.references :branch, foreign_key: true
+      t.references :place, foreign_key: true
       t.timestamps
     end
   end

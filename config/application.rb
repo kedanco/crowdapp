@@ -12,8 +12,8 @@ module Crowdapp
     config.load_defaults 5.1
 
     config.after_initialize do
-      Rails.application.load_tasks
-      Rake::Task[ 'import:init_restaurants' ].invoke
+      # Rails.application.load_tasks
+      # Rake::Task[ 'import:init_restaurants' ].invoke
 
     end
 
