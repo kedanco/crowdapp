@@ -24,17 +24,65 @@
         </li>
         <li class="dropdown area">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Area <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">North</a></li>
-            <li><a href="#">South</a></li>
-            <li><a href="#">West</a></li>
-            <li><a href="#">East</a></li>
-            <li><a href="#">Central</a></li>            
+          <ul class="dropdown-menu area-checkbox">
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">North
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">South
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">West
+                </label>
+              </div>
+            </li>             
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">East
+                </label>
+              </div>
+            </li> 
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">Central
+                </label>
+              </div>
+            </li>            
           </ul>
         </li>
         <li class="dropdown district">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">District <span class="caret"></span></a>
           <ul class="dropdown-menu">
+           <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">Raffles Place, Cecil, Marina, People’s Park
+                </label>
+              </div>
+            </li> 
+           <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">Anson, Tanjong Pagar
+                </label>
+              </div>
+           </li> 
+
+
+           
+            <%= options_for_select([["Dollar", "$"], ["Kroner", "DKK"]])%>
             <!-- district 01 -->
             <li>
               <a href="#">Raffles Place, Cecil, Marina, People’s Park</a>
@@ -84,23 +132,6 @@
               <a href="#">Balestier, Toa Payoh, Serangoon</a>
             </li> 
   
-13  34, 35, 36, 37  Macpherson, Braddell
-14  38, 39, 40, 41  Geylang, Eunos
-15  42, 43, 44, 45  Katong, Joo Chiat, Amber Road
-16  46, 47, 48  Bedok, Upper East Coast, Eastwood, Kew Drive
-17  49, 50, 81  Loyang, Changi
-18  51, 52  Tampines, Pasir Ris
-19  53, 54, 55, 82  Serangoon Garden, Hougang, Ponggol
-20  56, 57  Bishan, Ang Mo Kio
-21  58, 59  Upper Bukit Timah, Clementi Park, Ulu Pandan
-22  60, 61, 62, 63, 64  Jurong
-23  65, 66, 67, 68  Hillview, Dairy Farm, Bukit Panjang, Choa Chu Kang
-24  69, 70, 71  Lim Chu Kang, Tengah
-25  72, 73  Kranji, Woodgrove
-26  77, 78  Upper Thomson, Springleaf
-27  75, 76  Yishun, Sembawang
-28  79, 80  Seletar
-
 
 
 
@@ -113,19 +144,8 @@
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
+
+
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
