@@ -75,7 +75,17 @@ class ImportService
     puts "Imported #{placesCounter} places."
     puts "Operation finished in #{timeElapsed} seconds}"
 
+    # end
+
+    # TODO
+    # puts "Initiating Districts..."
+    # ref : "https://www.mingproperty.sg/singapore-district-code/"
+    # Init sg District Hash
+    # Loop through each Place object, get first 2 digit of postal code
+    # compare with sgDistrict Hash and assign district depending on the 2 digits
+    # place district should be integer
   end
+
 
   def initDistrict
 
@@ -147,18 +157,6 @@ class ImportService
       "west" => [22, 23, 24]
     }
 
-    # allPlaces = Place.all
-
-    # allPlaces.each do |place|
-
-    #   place.area = sgAreas.key(place.district)
-
-    # end
-
-    # TODO
-    # puts "Initiating Areas..."
-    # sgAreas hash should contain area "string" > include which districts
-    # based on each place's district, assign area.
   end
 
 end
