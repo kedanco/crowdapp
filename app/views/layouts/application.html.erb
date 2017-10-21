@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Crowdapp</title>
+    <title>Crowd App</title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+
+
+
   </head>
 
+
   <body>
+
+    
+    <span class="notice"><%= notice %></span>
+    <span class="alert"><%= alert %></span>
     <%= yield %>
+
   </body>
 </html>
