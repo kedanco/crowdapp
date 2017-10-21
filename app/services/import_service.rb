@@ -190,7 +190,7 @@ class ImportService
         place = Place.create!(
           name: row['name'],
           address: row['address'],
-          place_type: "restaurants",
+          place_type: "restaurant",
           lat: BigDecimal((coordinates[0].split(":"))[1]),
           lng: BigDecimal((coordinates[1].split(":"))[1]),
           postalcode: postalcode,
@@ -248,10 +248,10 @@ class ImportService
   def initCrowdDensity #TODO 
 
     # For Districts
-      # Get average of all places in district
+      # loop through each district, get places in district, Get average of all places in district, assign to district
 
      # For Areas
-      # get average of all districts in area
+      # loop through each area, get districts in area, get average of all districts in area, assign to area
 
   end
 
