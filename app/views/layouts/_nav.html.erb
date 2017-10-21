@@ -1,0 +1,151 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">HOME</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown view">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Area</a></li>
+            <li><a href="#">District</a></li>
+            <li><a href="#">Crowded</a></li>
+          </ul>
+        </li>
+        <li class="dropdown area">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Area <span class="caret"></span></a>
+          <ul class="dropdown-menu area-checkbox">
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">North
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">South
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">West
+                </label>
+              </div>
+            </li>             
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">East
+                </label>
+              </div>
+            </li> 
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">Central
+                </label>
+              </div>
+            </li>            
+          </ul>
+        </li>
+        <li class="dropdown district">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">District <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+           <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">Raffles Place, Cecil, Marina, People’s Park
+                </label>
+              </div>
+            </li> 
+           <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">Anson, Tanjong Pagar
+                </label>
+              </div>
+           </li> 
+
+
+           
+            <%= options_for_select([["Dollar", "$"], ["Kroner", "DKK"]])%>
+            <!-- district 01 -->
+            <li>
+              <a href="#">Raffles Place, Cecil, Marina, People’s Park</a>
+            </li>
+            <!-- district 02 -->
+            <li>
+              <a href="#">Anson, Tanjong Pagar</a>
+            </li>
+            <!-- district 03 -->            
+            <li>
+              <a href="#">Queenstown, Tiong Bahru</a>
+            </li>
+             <!-- district 04 -->            
+            <li>
+              <a href="#">Telok Blangah, Harbourfront</a>
+            </li>
+             <!-- district 05 -->            
+            <li>
+              <a href="#">Pasir Panjang, Hong Leong Garden, Clementi New Town</a>
+            </li>
+             <!-- district 06 -->            
+            <li>
+              <a href="#">High Street, Beach Road (part)</a>
+            </li>
+            <!-- district 07 -->            
+            <li>
+              <a href="#">Middle Road, Golden Mile</a>
+            </li>
+             <!-- district 08 -->            
+            <li>
+              <a href="#">Little India</a>
+            </li>
+             <!-- district 09 -->            
+            <li>
+              <a href="#">Orchard, Cairnhill, River Valley</a>
+            </li>
+            <!-- district 10 -->            
+            <li>
+              <a href="#">Ardmore, Bukit Timah, Holland Road, Tanglin</a>
+            </li>            
+             <!-- district 11 -->            
+            <li>
+              <a href="#">Watten Estate, Novena, Thomson</a>
+            </li>
+             <!-- district 12 -->            
+            <li>
+              <a href="#">Balestier, Toa Payoh, Serangoon</a>
+            </li> 
+  
+
+
+
+          </ul>
+        </li>       
+      </ul>
+      <form class="navbar-form navbar-left">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

@@ -16,6 +16,8 @@
 //= require bootstrap-sprockets
 //= require rails-ujs
 //= require turbolinks
+//= require jquery
+//= require bootstrap-sprockets
 //= require_tree .
 
 
@@ -234,3 +236,4 @@ function initMap() {
   map.setMapTypeId(customMapTypeId);
 
 }
+
