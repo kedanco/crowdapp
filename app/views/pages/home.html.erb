@@ -1,14 +1,78 @@
-<h2>Form Data - enter</h2>
 
-<%= form_tag("/output_to_map", method: "post", remote: true) do %>
- <%= check_box_tag(:pet_dog) %>
- <%= label_tag(:pet_dog, "I own a dog") %>
- <%= submit_tag("Search") %>
-<% end %>
+<nav id="navbar-primary" class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-primary-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar-primary-collapse">
+      <ul class="nav navbar-nav">
 
-<%= check_box_tag 'North',  
-      data: {
-        remote: true,
-        url: "/output_to_map",
-        method: :post
-      } %>
+        <li><a href="/map">Map</a></li>
+        <li><a href="/settings">Settings</a></li>
+        <li><a href="/faq">Faq</a></li>
+        <li><a href="/log_out">Log Out</a></li>
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+</header><!-- header role="banner" -->
+
+
+<div id="mapBody">
+
+    <div id="map"></div>
+
+
+</div>
+
+<script type="text/javascript">
+
+
+function initMap() {
+  // Create the map.
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 12,
+    center: {lat: 1.350452, lng:103.820581},
+    mapTypeId: 'roadmap'
+  });
+
+  var transitLayer = new google.maps.TransitLayer();
+  transitLayer.setMap(map);
+
+  // Draw Circles
+  <% @areas.each do |areaCircle| %>
+
+     var coordinates = {lat: <%= areaCircle.lat %>,lng: <%= areaCircle.lng %>}
+
+     var crowdDensityCircle = new google.maps.Circle({
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 3,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35,
+          map: map,
+          center: coordinates,
+          radius: Math.random()*5000
+      });
+
+  <% end %>
+
+}
+
+
+      
+ </script>
+
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPS_KEY'] %>&callback=initMap&language=en&region=SG">
+    </script>
+
+
+

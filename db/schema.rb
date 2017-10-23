@@ -10,34 +10,73 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171019055414) do
+ActiveRecord::Schema.define(version: 20171020080846) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "areas", force: :cascade do |t|
+    t.string "name"
+    t.decimal "lat", precision: 15, scale: 10
+    t.decimal "lng", precision: 15, scale: 10
+    t.integer "crowd_density"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "crowd_levels", force: :cascade do |t|
     t.integer "hour"
     t.string "day"
-    t.integer "density"
+    t.integer "crowd_density"
     t.bigint "place_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["place_id"], name: "index_crowd_levels_on_place_id"
   end
 
+  create_table "districts", force: :cascade do |t|
+    t.string "name"
+    t.decimal "lat", precision: 15, scale: 10
+    t.decimal "lng", precision: 15, scale: 10
+    t.integer "crowd_density"
+    t.bigint "area_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["area_id"], name: "index_districts_on_area_id"
+  end
+
   create_table "places", force: :cascade do |t|
     t.string "name"
     t.string "address"
-    t.string "coordinates"
     t.string "place_type"
     t.decimal "rating"
     t.integer "rating_number"
     t.string "postalcode"
-    t.integer "district"
-    t.string "area"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "lat", precision: 15, scale: 10
+    t.decimal "lng", precision: 15, scale: 10
+    t.bigint "district_id"
+    t.index ["district_id"], name: "index_places_on_district_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "crowd_levels", "places"
+  add_foreign_key "districts", "areas"
 end
