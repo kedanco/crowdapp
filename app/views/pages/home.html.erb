@@ -1,0 +1,14 @@
+<h2>Form Data - enter</h2>
+
+<%= form_tag("/output_to_map", method: "post", remote: true) do %>
+ <%= check_box_tag(:pet_dog) %>
+ <%= label_tag(:pet_dog, "I own a dog") %>
+ <%= submit_tag("Search") %>
+<% end %>
+
+<%= check_box_tag 'North',  
+      data: {
+        remote: true,
+        url: "/output_to_map",
+        method: :post
+      } %>
