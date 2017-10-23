@@ -169,6 +169,50 @@ class ImportService
 
   end
 
+  # def self.initCrowdDensity
+
+  #   puts "Initiating Crowd Density for Areas & Districts..."
+  #   sleep(2)
+
+    
+  #     total_density_districts = 0
+  #     total_density_places = 0
+
+  #     areas = Area.all
+
+  #     areas.each do |area|
+
+  #       districts = area.districts
+  #       districts.each do |district|
+
+  #       places = district.places
+
+  #         if !places.empty?
+
+  #           places.each do |place|
+
+  #             crowd_levels = place.crowd_levels
+  #             crowd_levels.each do |level|
+
+  #               total_density_places += level.crowd_density
+
+  #             end
+              
+  #           end
+
+  #           district.crowd_density = (total_density_places/places.count).ceil
+  #           total_density_districts += district.crowd_density
+
+  #         end
+
+  #       area.crowd_density = total_density_districts
+
+  #       end
+
+  #     end
+
+  # end
+
   def self.import(filename)
 
     # check for existing data. If exists, wipe.
@@ -278,18 +322,8 @@ class ImportService
 
     end
 
-  end
-
-
-  def initCrowdDensity #TODO 
-
-    # For Districts
-      # loop through each district, get places in district, Get average of all places in district, assign to district
-
-     # For Areas
-      # loop through each area, get districts in area, get average of all districts in area, assign to area
+    initCrowdDensity()
 
   end
-
 
 end
