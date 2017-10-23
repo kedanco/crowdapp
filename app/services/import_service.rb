@@ -10,6 +10,7 @@ class ImportService
   @area_districts = {}
   @area_coordinates = {}
   @exceptions = []
+  @district_coordinates = []
 
   def self.initArea
 
@@ -41,6 +42,40 @@ class ImportService
 
     puts "Initiating Districts..."
     # ref : "https://www.mingproperty.sg/singapore-district-code/"
+
+    @district_coordinates = [
+      [1.281359, 103.857308],
+      [1.272229, 103.842776],
+      [1.286210, 103.817980],
+      [1.272006, 103.816444],
+      [1.295983, 103.777785],
+      [1.292532, 103.849176],
+      [1.300593, 103.858369],
+      [1.310929, 103.854315],
+      [1.302403, 103.839263],
+      # 10
+      [1.313213, 103.806963],
+      [1.334023, 103.819581],
+      [1.327019, 103.857365],
+      [1.334272, 103.874158],
+      [1.324489, 103.899800],
+      [1.303139, 103.899272],
+      [1.326052, 103.946854],
+      [1.349646, 103.998077],
+      [1.364682, 103.942726],
+      [1.376565, 103.896706],
+      # 20
+      [1.364162, 103.835260],
+      [1.346052, 103.781466],
+      [1.334059, 103.694739],
+      [1.373982, 103.759330],
+      [1.403245, 103.702415],
+      [1.421948, 103.769030],
+      [1.396523, 103.818713],
+      [1.435432, 103.837359],
+      # 28
+      [1.407041, 103.868483]
+    ]
 
     @district_codes = [
       [1,2,3,4,5,6],
@@ -122,8 +157,8 @@ class ImportService
 
       District.find_or_create_by!(
         name: district,
-        # lat:
-        # lng:
+        lat: @district_coordinates[index].first,
+        lng: @district_coordinates[index].last,
         area_id: Area.find_by(name: area_name).id
       ) 
 
@@ -186,7 +221,7 @@ class ImportService
 
         dist_id = @district_codes.index{ |codes| codes.include?(two_digit_postalcode.to_i) } +1
 
-        puts "dist_id is #{dist_id}",
+        puts "dist_id is #{dist_id}"
         place = Place.create!(
           name: row['name'],
           address: row['address'],
