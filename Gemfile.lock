@@ -214,9 +214,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-
-  bootstrap3-datetimepicker-rails (~> 4.17.47)
   bootstrap-sass (~> 3.3.6)
+  bootstrap3-datetimepicker-rails (~> 4.17.47)
   byebug
   capybara (~> 2.13)
   coffee-rails (~> 4.2)
