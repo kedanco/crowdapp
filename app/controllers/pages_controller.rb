@@ -7,9 +7,9 @@ class PagesController < ApplicationController
   end
 
   def faq
+    end
 
   def home
     @areas = Area.all
-
   end
 end
