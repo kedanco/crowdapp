@@ -16,14 +16,67 @@
       <ul class="nav navbar-nav">
         <li class="dropdown view">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
+
           <ul class="dropdown-menu">
             <li><a href="#">Area</a></li>
             <li><a href="#">District</a></li>
             <li><a href="#">Crowd</a></li>
+
+          <ul class="dropdown-menu" data-turbolinks="false">
+            <li><a id="AreaButton" href="#">Area</a></li>
+            <li><a id="DistrictButton" href="#">District</a></li>
+            <li><a href="#">Crowded</a></li>
+
           </ul>
         </li>
-        <li class="dropdown area">
+        <li class="dropdown area-dropdown-list">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Area <span class="caret"></span></a>
+
+          <ul class="dropdown-menu area-checkbox">
+            <li>
+
+              <%= form_tag("/output_to_map", method: :post, remote: true) do %>
+              <div class = "checkbox">
+                <label for="North">
+                </label>
+                <input type="checkbox" name="North" value="North">North
+              </div>
+              <% end %>
+
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">South
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">West
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">East
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">Central
+                </label>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown district-dropdown-list">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">District <span class="caret"></span></a>
+
           <ul class="dropdown-menu">
             <%= form_tag("/output_to_map", method: :post, id:"output_to_map") do %>
              <li style="padding-left: 10px;">
@@ -72,6 +125,16 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
 
+        <div class='navbar-form'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" placeholder="<%= Time.now.strftime("%m/%d/%Y %I:00 %p") %>" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
 
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

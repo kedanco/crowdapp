@@ -9,7 +9,14 @@ class PagesController < ApplicationController
   def faq
     end
 
+  end
+  
   def home
     @areas = Area.all
   end
+
+  def output_to_map
+    
+  end
 end
+
