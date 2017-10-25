@@ -11,6 +11,7 @@ class ImportService
   @area_coordinates = {}
   @exceptions = []
   @district_coordinates = []
+  @timeTracker = {}
 
   def self.initArea
 
@@ -169,156 +170,239 @@ class ImportService
 
   end
 
-  # def self.initCrowdDensity
+  # Assigns areas' & districts' crowd_level objects from the averages of places' crowd_levels 
+  def self.initCrowdDensity
 
-  #   puts "Initiating Crowd Density for Areas & Districts..."
-  #   sleep(2)
+    start = Time.now
 
-    
-  #     total_density_districts = 0
-  #     total_density_places = 0
+    puts "Initiating Crowd Density for Areas & Districts..."
+    sleep(2)
 
-  #     areas = Area.all
+    total_density_districts = {
 
-  #     areas.each do |area|
+      "Monday" => Array.new(24){0},
+      "Tuesday" => Array.new(24){0},
+      "Wednesday" => Array.new(24){0},
+      "Thursday" => Array.new(24){0},
+      "Friday" => Array.new(24){0},
+      "Saturday" => Array.new(24){0},
+      "Sunday" => Array.new(24){0}
 
-  #       districts = area.districts
-  #       districts.each do |district|
+    }
 
-  #       places = district.places
+    total_density_places = {
 
-  #         if !places.empty?
+      "Monday" => Array.new(24){0},
+      "Tuesday" => Array.new(24){0},
+      "Wednesday" => Array.new(24){0},
+      "Thursday" => Array.new(24){0},
+      "Friday" => Array.new(24){0},
+      "Saturday" => Array.new(24){0},
+      "Sunday" => Array.new(24){0}
 
-  #           places.each do |place|
+    }
 
-  #             crowd_levels = place.crowd_levels
-  #             crowd_levels.each do |level|
+    areas = Area.all
 
-  #               total_density_places += level.crowd_density
+    areas.each do |area|
 
-  #             end
-              
-  #           end
+      districts = area.districts
+      districts.each do |district|
 
-  #           district.crowd_density = (total_density_places/places.count).ceil
-  #           total_density_districts += district.crowd_density
+        places = district.places
 
-  #         end
+        if !places.empty?
 
-  #       area.crowd_density = total_density_districts
+          places.each do |place|
 
-  #       end
+            #puts crowd levels in ascending order
+            crowd_levels = place.crowd_levels.reverse if place.crowd_levels.first[:day] = "Sunday"
 
-  #     end
+            crowd_levels.each_with_index do |level,index|
 
-  # end
+              day = total_density_districts.keys[index / 24]
+              hour = index % 24
 
+              (total_density_places[day][hour]).nil? ? (total_density_places[day][hour] = level.crowd_density) : (total_density_places[day][hour] += level.crowd_density)
+
+            end
+            
+          end
+
+          total_density_places.each do |day,levels|
+
+            levels.each_with_index do |level, hour|
+
+              average_level = (level/places.count).ceil if level != 0
+
+              crowd_level = CrowdLevel.find_or_create_by!(
+
+                hour: hour,
+                day: day,
+                crowd_density: average_level,
+                district_id: district.id
+
+              )
+
+              (total_density_districts[day][hour]).nil? ? (total_density_districts[day][hour] = average_level) : (total_density_districts[day][hour] += average_level)
+
+            end
+
+          end
+
+          total_density_districts.each do |day,levels|
+
+            levels.each_with_index do |level,hour|
+
+              average_level = (level/districts.count).ceil if level != 0
+
+              crowd_level = CrowdLevel.find_or_create_by!(
+
+                hour: hour,
+                day: day,
+                crowd_density: average_level,
+                area_id: area.id
+
+              )
+
+            end
+
+          end
+
+        end
+
+      end
+
+    end
+
+    finish = Time.now
+    crowd_density_time = (finish-start).ceil
+    @timeTracker["initCrowdDensity"] = crowd_density_time
+    puts "Crowd Density init finished in #{crowd_density_time} seconds"
+    puts "Import Service took a total of #{@timeTracker.values.inject(&:+)} seconds"
+
+  end
+
+  # Creates Places and its crowd_level objects
   def self.import(filename)
 
+    # TODO Add input for user to decide to wipe or not wipe
     # check for existing data. If exists, wipe.
     if (Place.count != 0)
+
       start = Time.now
       puts "Flushing data.."
+
       Place.destroy_all
+      CrowdLevel.destroy_all
+
       finish = Time.now
-      flushTime = (finish-start).ceil
-      puts "Flushing finished in #{flushTime} seconds"
+      flush_time = (finish-start).ceil
+      @timeTracker["flushing"] = flush_time
+
+      puts "Flushing finished in #{flush_time} seconds"
       sleep(2)
+
     end
 
     ImportService.initArea()
     ImportService.initDistrict()
 
-    start = Time.now
-    puts "initializing restaurants..."
+    if CrowdLevel.blank?
 
-    file = File.join Rails.root, filename
+      start = Time.now
+      puts "initializing restaurants..."
 
-    CSV.foreach(file, headers: true) do |row|
+      file = File.join Rails.root, filename
 
-      #places
+      CSV.foreach(file, headers: true) do |row|
 
-        postalcode = row['address'][-6..-1]
+        #places
 
-        if !postalcode.is_number?
+          postalcode = row['address'][-6..-1]
 
-           #Searches for postalcode within address string
-           result = row['address'].scan(/\b\d{6}\b/)
+          if !postalcode.is_number?
 
-           if !result.empty?
-              postalcode = result[0]
-           else
+             #Searches for postalcode within address string
+             result = row['address'].scan(/\b\d{6}\b/)
 
-            @exceptions << row['name'] + " " + row['address']
-            puts "added #{row['name']} to exception list."
-            puts "skipping row..."
-            sleep(3)
-            next
+             if !result.empty?
+                postalcode = result[0]
+             else
 
-          end
+              @exceptions << row['name'] + " " + row['address']
+              puts "added #{row['name']} to exception list."
+              puts "skipping row..."
+              sleep(3)
+              next
 
-        end
-
-        coordinates = row['coordinates'].split(",")
-
-        two_digit_postalcode = postalcode[0..1]
-
-        dist_id = @district_codes.index{ |codes| codes.include?(two_digit_postalcode.to_i) } +1
-
-        puts "dist_id is #{dist_id}"
-        place = Place.create!(
-          name: row['name'],
-          address: row['address'],
-          place_type: "restaurant",
-          lat: BigDecimal((coordinates[0].split(":"))[1]),
-          lng: BigDecimal((coordinates[1].split(":"))[1]),
-          postalcode: postalcode,
-          rating: row['rating'],
-          rating_number: row['rating_n'],
-          district_id: dist_id
-        )
-
-        puts "#{place.name} - #{place.errors.full_messages}" if place.errors.any?
-
-      #crowd_level
-
-        #ALL Data
-        dataString = row['populartimes']
-
-        crowd_level_data = JSON.parse dataString.gsub(/\s+/, "").gsub("'",'"')
-
-        crowd_level_data.each do |dataset|
-          
-          day = dataset["name"]
-
-          # hour refers to start of hour: '0' means midnight-1am
-          dataset["data"].each_with_index do |density, hour|
-
-            crowd_level = CrowdLevel.create!(
-
-              hour: hour,
-              day: day,
-              crowd_density: density,
-              place_id: place.id
-            )
+            end
 
           end
 
-        end
+          coordinates = row['coordinates'].split(",")
 
-    end #of CSV import loop
+          two_digit_postalcode = postalcode[0..1]
 
-    finish = Time.now
+          dist_id = @district_codes.index{ |codes| codes.include?(two_digit_postalcode.to_i) } +1
 
-    timeElapsed = (finish-start).ceil
-    puts "Imported #{Place.count} places."
-    puts "Operation finished in #{timeElapsed} seconds"
+          puts "dist_id is #{dist_id}"
+          place = Place.create!(
+            name: row['name'],
+            address: row['address'],
+            place_type: "restaurant",
+            lat: BigDecimal((coordinates[0].split(":"))[1]),
+            lng: BigDecimal((coordinates[1].split(":"))[1]),
+            postalcode: postalcode,
+            rating: row['rating'],
+            rating_number: row['rating_n'],
+            district_id: dist_id
+          )
 
-    if !@exceptions.empty?
+          puts "#{place.name} - #{place.errors.full_messages}" if place.errors.any?
 
-      puts "=============================================="
-      puts "Exception List: #{@exceptions.count} exceptions."
-      pp @exceptions
+        #crowd_level
+
+          #ALL Data
+          dataString = row['populartimes']
+
+          crowd_level_data = JSON.parse dataString.gsub(/\s+/, "").gsub("'",'"')
+
+          crowd_level_data.each do |dataset|
+            
+            day = dataset["name"]
+
+            # hour refers to start of hour: '0' means midnight-1am
+            dataset["data"].each_with_index do |density, hour|
+
+              crowd_level = CrowdLevel.create!(
+
+                hour: hour,
+                day: day,
+                crowd_density: density,
+                place_id: place.id
+              )
+
+            end
+
+          end
+
+      end #of CSV import loop
+
+      finish = Time.now
+
+      timeElapsed = (finish-start).ceil
+      @timeTracker["file_import"] = timeElapsed
+      puts "Imported #{Place.count} places."
+      puts "Operation finished in #{timeElapsed} seconds"
+
+      if !@exceptions.empty?
+
+        puts "=============================================="
+        puts "Exception List: #{@exceptions.count} exceptions."
+        pp @exceptions
+
+      end
 
     end
 
