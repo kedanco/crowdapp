@@ -45,29 +45,91 @@ function initMap() {
   var transitLayer = new google.maps.TransitLayer();
   transitLayer.setMap(map);
 
+  var contentArray = [
+  //
+        '<div class="map-info-window">'+
+        '<h1>My Info Window</h1>'+
+        '<p>Circle 1</p>'+
+        '</div>',
+   //
+        '<div class="map-info-window">'+
+        '<h1>My Info Window</h1>'+
+        '<p>Circle 2</p>'+
+        '</div>',
+  //
+        '<div class="map-info-window">'+
+        '<h1>My Info Window</h1>'+
+        '<p>Circle 3</p>'+
+        '</div>',
+  //
+        '<div class="map-info-window">'+
+        '<h1>My Info Window</h1>'+
+        '<p>Circle 4</p>'+
+        '</div>',
+  //
+        '<div class="map-info-window">'+
+        '<h1>My Info Window</h1>'+
+        '<p>Circle 5</p>'+
+        '</div>',
+        ];
+
   // Draw Circles
-  <% @areas.each do |areaCircle| %>
+  <% @areas.each_with_index do |areaCircle, index| %>
 
-     var coordinates = {lat: <%= areaCircle.lat %>,lng: <%= areaCircle.lng %>}
+     var coordinates = {lat: <%= areaCircle.lat %>,lng: <%= areaCircle.lng %>};
 
-     var crowdDensityCircle = new google.maps.Circle({
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.8,
-          strokeWeight: 3,
-          fillColor: '#FF0000',
-          fillOpacity: 0.35,
-          map: map,
-          center: coordinates,
-          radius: Math.random()*5000
-      });
+     // var crowdDensityCircle = new google.maps.Circle({
+     //      strokeColor: '#FF0000',
+     //      strokeOpacity: 0.8,
+     //      strokeWeight: 3,
+     //      fillColor: '#FF0000',
+     //      fillOpacity: 0.35,
+     //      map: map,
+     //      center: coordinates,
+     //      radius: Math.random()*5000
+     //  });
+        var existingCrowdDensityCircle = {
+            path: google.maps.SymbolPath.CIRCLE,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 3,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            // adjust scale
+            scale: 20
+        };
 
-  <% end %>
+        var newCrowdDensityCircle_<%=index%> = new google.maps.Marker({
+        icon: existingCrowdDensityCircle,
+        position: coordinates
+        });
 
+        var contentString = contentArray[<%= index %>];
+
+        var infowindow_<%= index %> = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+        newCrowdDensityCircle_<%=index%>.setMap(map);
+
+        newCrowdDensityCircle_<%=index%>.addListener('click', function() {
+          infowindow_<%= index %>.open(map, newCrowdDensityCircle_<%=index%>);
+        });
+
+        <% end %>
 }
 
 
       
  </script>
+
+<!-- this is for sizing the infowindow as below -->
+<style>
+.gm-style-iw {
+  width: 500px; 
+  height: 500px;
+}
+</style>
 
   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPS_KEY'] %>&callback=initMap&language=en&region=SG">
