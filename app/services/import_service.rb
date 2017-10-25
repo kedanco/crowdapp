@@ -164,8 +164,8 @@ class ImportService
 
     end
 
-    puts "#{District.count} districts created."
-    sleep(2)
+    # puts "#{District.count} districts created."
+    # sleep(2)
 
   end
 

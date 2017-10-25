@@ -13,10 +13,14 @@ class PagesController < ApplicationController
   
   def home
     @areas = Area.all
+
+    # @district_names = ImportService.initDistrict
+    # @district_names = District.select(:name)
+    
   end
 
   def output_to_map
-    
+
   end
 end
 
