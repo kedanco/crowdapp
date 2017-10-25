@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">HOME</a>
+      <a class="navbar-brand" href="/home">HOME</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -16,14 +16,22 @@
       <ul class="nav navbar-nav">
         <li class="dropdown view">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
+
+          <ul class="dropdown-menu">
+            <li><a href="#">Area</a></li>
+            <li><a href="#">District</a></li>
+            <li><a href="#">Crowd</a></li>
+
           <ul class="dropdown-menu" data-turbolinks="false">
             <li><a id="AreaButton" href="#">Area</a></li>
             <li><a id="DistrictButton" href="#">District</a></li>
             <li><a href="#">Crowded</a></li>
+
           </ul>
         </li>
         <li class="dropdown area-dropdown-list">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Area <span class="caret"></span></a>
+
           <ul class="dropdown-menu area-checkbox">
             <li>
               <%= form_tag("/output_to_map", method: :post, remote: true) do %>
@@ -31,7 +39,7 @@
                 <label for="North">
                 </label>
                 <input type="checkbox" name="North" value="North">North
-              </div>            
+              </div>
               <% end %>
 
             </li>
@@ -48,99 +56,67 @@
                   <input type="checkbox">West
                 </label>
               </div>
-            </li>             
+            </li>
             <li>
               <div class = "checkbox">
                 <label>
                   <input type="checkbox">East
                 </label>
               </div>
-            </li> 
+            </li>
             <li>
               <div class = "checkbox">
                 <label>
                   <input type="checkbox">Central
                 </label>
               </div>
-            </li>            
+            </li>
           </ul>
         </li>
         <li class="dropdown district-dropdown-list">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">District <span class="caret"></span></a>
+
           <ul class="dropdown-menu">
-           <li>
-              <div class = "checkbox">
-                <label>
-                  <input type="checkbox">Raffles Place, Cecil, Marina, People’s Park
-                </label>
-              </div>
-            </li> 
-           <li>
-              <div class = "checkbox">
-                <label>
-                  <input type="checkbox">Anson, Tanjong Pagar
-                </label>
-              </div>
-           </li> 
+            <%= form_tag("/output_to_map", method: :post, id:"output_to_map") do %>
+             <li style="padding-left: 10px;">
+                 <input type="checkbox" class="area-checkbox" name="North" value="North">
+                 <label for="North">North</label>
+             </li>
+             <li style="padding-left: 10px;">
+                 <input type="checkbox" class="area-checkbox" name="South" value="South">
+                 <label for="South">South</label>
+             </li>
+
+             <li style="padding-left: 10px;">
+                 <input type="checkbox" class="area-checkbox" name="East" value="East">
+                 <label for="East">East</label>
+             </li>
+             <li style="padding-left: 10px;">
+                 <input type="checkbox" class="area-checkbox" name="West" value="West">
+                 <label for="West">West</label>
+             </li>
+             <li style="padding-left: 10px;">
+                 <input type="checkbox" class="area-checkbox" name="Central" value="Central">
+                 <label for="Central">Central</label>
+             </li>
+             <% end %>
+              <li>
+
+        </ul>
+      </li>
 
 
-           
-            <%= options_for_select([["Dollar", "$"], ["Kroner", "DKK"]])%>
-            <!-- district 01 -->
-            <li>
-              <a href="#">Raffles Place, Cecil, Marina, People’s Park</a>
-            </li>
-            <!-- district 02 -->
-            <li>
-              <a href="#">Anson, Tanjong Pagar</a>
-            </li>
-            <!-- district 03 -->            
-            <li>
-              <a href="#">Queenstown, Tiong Bahru</a>
-            </li>
-             <!-- district 04 -->            
-            <li>
-              <a href="#">Telok Blangah, Harbourfront</a>
-            </li>
-             <!-- district 05 -->            
-            <li>
-              <a href="#">Pasir Panjang, Hong Leong Garden, Clementi New Town</a>
-            </li>
-             <!-- district 06 -->            
-            <li>
-              <a href="#">High Street, Beach Road (part)</a>
-            </li>
-            <!-- district 07 -->            
-            <li>
-              <a href="#">Middle Road, Golden Mile</a>
-            </li>
-             <!-- district 08 -->            
-            <li>
-              <a href="#">Little India</a>
-            </li>
-             <!-- district 09 -->            
-            <li>
-              <a href="#">Orchard, Cairnhill, River Valley</a>
-            </li>
-            <!-- district 10 -->            
-            <li>
-              <a href="#">Ardmore, Bukit Timah, Holland Road, Tanglin</a>
-            </li>            
-             <!-- district 11 -->            
-            <li>
-              <a href="#">Watten Estate, Novena, Thomson</a>
-            </li>
-             <!-- district 12 -->            
-            <li>
-              <a href="#">Balestier, Toa Payoh, Serangoon</a>
-            </li> 
-  
+
+
+
+
 
 
 
           </ul>
-        </li>       
+        </li>
       </ul>
+
       <form class="navbar-form navbar-left">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search">

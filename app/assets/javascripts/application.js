@@ -238,4 +238,3 @@ function initMap() {
   map.setMapTypeId(customMapTypeId);
 
 }
-
