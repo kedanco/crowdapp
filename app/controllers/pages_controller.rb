@@ -7,10 +7,10 @@ class PagesController < ApplicationController
   end
 
   def faq
-    end
+
 
   end
-  
+
   def home
     @areas = Area.all
 
@@ -22,5 +22,5 @@ class PagesController < ApplicationController
   def output_to_map
 
   end
-end
 
+end

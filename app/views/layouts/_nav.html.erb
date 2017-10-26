@@ -26,12 +26,11 @@
             <li><a id="AreaButton" href="#">Area</a></li>
             <li><a id="DistrictButton" href="#">District</a></li>
             <li><a href="#">Crowded</a></li>
-
           </ul>
         </li>
+
         <li class="dropdown area-dropdown-list">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Area <span class="caret"></span></a>
-
           <ul class="dropdown-menu area-checkbox">
             <li>
               <%= form_tag("/output_to_map", method: :post, remote: true) do %>
@@ -104,14 +103,6 @@
 
         </ul>
       </li>
-
-
-
-
-
-
-
-
 
           </ul>
         </li>
