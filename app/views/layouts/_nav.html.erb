@@ -11,16 +11,15 @@
       <a class="navbar-brand" href="/home">HOME</a>
     </div>
 
+
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+      <%= form_tag("/output_to_map", method: :post, class: "output_to_map_from_area", remote: :true, authenticity_token: :true) do %>
+
       <ul class="nav navbar-nav">
         <li class="dropdown view">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
-
-          <ul class="dropdown-menu">
-            <li><a href="#">Area</a></li>
-            <li><a href="#">District</a></li>
-            <li><a href="#">Crowd</a></li>
 
           <ul class="dropdown-menu" data-turbolinks="false">
             <li><a id="AreaButton" href="#">Area</a></li>
@@ -29,111 +28,67 @@
 
           </ul>
         </li>
-        <li class="dropdown area-dropdown-list">
+
+        <li class="dropdown area-dropdown-list" data-turbolinks="false">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Area <span class="caret"></span></a>
 
-          <ul class="dropdown-menu area-checkbox">
-            <li>
-              <%= form_tag("/output_to_map", method: :post, remote: true) do %>
-              <div class = "checkbox">
-                <label for="North">
-                </label>
-                <input type="checkbox" name="North" value="North">North
-              </div>
-              <% end %>
+          <ul class="dropdown-menu list-area-checkbox">
 
-            </li>
-            <li>
-              <div class = "checkbox">
-                <label>
-                  <input type="checkbox">South
-                </label>
-              </div>
-            </li>
-            <li>
-              <div class = "checkbox">
-                <label>
-                  <input type="checkbox">West
-                </label>
-              </div>
-            </li>
-            <li>
-              <div class = "checkbox">
-                <label>
-                  <input type="checkbox">East
-                </label>
-              </div>
-            </li>
-            <li>
-              <div class = "checkbox">
-                <label>
-                  <input type="checkbox">Central
-                </label>
-              </div>
-            </li>
+<!-- , format: :js -->
+             <li>
+                 <%#= check_box_tag 'area_checkbox', 'north', false, { :onclick => "$('#output_to_map_from_area').submit();" }%>
+                 <input type="checkbox" class="area-checkbox" name="area_checkbox[]" value="north">
+                 <label for="area_checkbox">North</label>
+             </li>
+             <li>
+                 <input type="checkbox" class="area-checkbox" name="area_checkbox[]" value="south" remote="true">
+                 <label for="area_checkbox">South</label>
+             </li>
+
+             <li>
+                 <input type="checkbox" class="area-checkbox" name="area_checkbox[]" value="east">
+                 <label for="area_checkbox">East</label>
+             </li>
+             <li>
+                 <input type="checkbox" class="area-checkbox" name="area_checkbox[]" value="west">
+                 <label for="area_checkbox">West</label>
+             </li>
+             <li>
+                 <input type="checkbox" class="area-checkbox" name="area_checkbox[]" value="central">
+                 <label for="area_checkbox">Central</label>
+             </li>
           </ul>
         </li>
+
         <li class="dropdown district-dropdown-list">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">District <span class="caret"></span></a>
 
-          <ul class="dropdown-menu">
-            <%= form_tag("/output_to_map", method: :post, id:"output_to_map") do %>
-             <li style="padding-left: 10px;">
-                 <input type="checkbox" class="area-checkbox" name="North" value="North">
-                 <label for="North">North</label>
+          <ul class="dropdown-menu list-district-checkbox">
+          
+            <% @districts.each do |district| %>
+             <li>
+                 <input type="checkbox" class="district-checkbox" name="district_checkbox[]" value="<%=district.name%>">
+                 <label for="district_checkbox"><%= district.name %></label>
              </li>
-             <li style="padding-left: 10px;">
-                 <input type="checkbox" class="area-checkbox" name="South" value="South">
-                 <label for="South">South</label>
-             </li>
-
-             <li style="padding-left: 10px;">
-                 <input type="checkbox" class="area-checkbox" name="East" value="East">
-                 <label for="East">East</label>
-             </li>
-             <li style="padding-left: 10px;">
-                 <input type="checkbox" class="area-checkbox" name="West" value="West">
-                 <label for="West">West</label>
-             </li>
-             <li style="padding-left: 10px;">
-                 <input type="checkbox" class="area-checkbox" name="Central" value="Central">
-                 <label for="Central">Central</label>
-             </li>
-             <% end %>
-              <li>
-
-        </ul>
-      </li>
-
-
-
-
-
-
-
-
-
+            <% end %>
           </ul>
         </li>
-      </ul>
 
-      <form class="navbar-form navbar-left">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
+        <li class="navbar-form">
+          <input type="text" class="form-control" placeholder="Search" name="search-result">
+          <button id="submit-area-district-search-datetime" type="submit" class="btn btn-default">Submit</button>
+        </li>
 
-        <div class='navbar-form'>
-            <div class="form-group">
-                <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class="form-control" placeholder="<%= Time.now.strftime("%m/%d/%Y %I:00 %p") %>" />
-                    <span class="input-group-addon">
+        <li class="navbar-form">
+          <div class='input-group date' id='datetimepicker1'>
+               <input type='text' class="form-control date-time" name="date-time" placeholder="<%= Time.now.strftime("%m/%d/%Y %I:00 %p") %>" />
+              <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
-            </div>
-        </div>
+               </span>
+          </div>
+        </li>
+      </ul>
+      <% end %>
 
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
