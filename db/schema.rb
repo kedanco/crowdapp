@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171020080846) do
+ActiveRecord::Schema.define(version: 20171019154831) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 20171020080846) do
     t.string "name"
     t.decimal "lat", precision: 15, scale: 10
     t.decimal "lng", precision: 15, scale: 10
-    t.integer "crowd_density"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -29,8 +28,12 @@ ActiveRecord::Schema.define(version: 20171020080846) do
     t.string "day"
     t.integer "crowd_density"
     t.bigint "place_id"
+    t.bigint "district_id"
+    t.bigint "area_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["area_id"], name: "index_crowd_levels_on_area_id"
+    t.index ["district_id"], name: "index_crowd_levels_on_district_id"
     t.index ["place_id"], name: "index_crowd_levels_on_place_id"
   end
 
@@ -38,7 +41,6 @@ ActiveRecord::Schema.define(version: 20171020080846) do
     t.string "name"
     t.decimal "lat", precision: 15, scale: 10
     t.decimal "lng", precision: 15, scale: 10
-    t.integer "crowd_density"
     t.bigint "area_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -48,14 +50,14 @@ ActiveRecord::Schema.define(version: 20171020080846) do
   create_table "places", force: :cascade do |t|
     t.string "name"
     t.string "address"
+    t.decimal "lat", precision: 15, scale: 10
+    t.decimal "lng", precision: 15, scale: 10
     t.string "place_type"
     t.decimal "rating"
     t.integer "rating_number"
     t.string "postalcode"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "lat", precision: 15, scale: 10
-    t.decimal "lng", precision: 15, scale: 10
     t.bigint "district_id"
     t.index ["district_id"], name: "index_places_on_district_id"
   end
@@ -77,6 +79,9 @@ ActiveRecord::Schema.define(version: 20171020080846) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "crowd_levels", "areas"
+  add_foreign_key "crowd_levels", "districts"
   add_foreign_key "crowd_levels", "places"
   add_foreign_key "districts", "areas"
+  add_foreign_key "places", "districts"
 end

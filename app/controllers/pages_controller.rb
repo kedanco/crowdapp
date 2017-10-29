@@ -8,7 +8,7 @@ class PagesController < ApplicationController
 
   def faq
   end
-  
+
   def home
     @areas = Area.all
 
@@ -31,5 +31,5 @@ class PagesController < ApplicationController
 
     # output_to_map.js.erb
   end
-end
 
+end
