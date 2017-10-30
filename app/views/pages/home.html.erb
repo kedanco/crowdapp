@@ -1,5 +1,256 @@
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/home">HOME</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown view">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
+
+          <ul class="dropdown-menu">
+            <li><a href="#">Area</a></li>
+            <li><a href="#">District</a></li>
+            <li><a href="#">Crowd</a></li>
+
+          <ul class="dropdown-menu" data-turbolinks="false">
+            <li><a id="AreaButton" href="#">Area</a></li>
+            <li><a id="DistrictButton" href="#">District</a></li>
+            <li><a href="#">Crowded</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown area-dropdown-list">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Area <span class="caret"></span></a>
+          <ul class="dropdown-menu area-checkbox">
+            <li>
+              <%= form_tag("/output_to_map", method: :post, remote: true) do %>
+              <div class = "checkbox">
+                <label for="North">
+                </label>
+                <input type="checkbox" name="North" value="North">North
+              </div>
+              <% end %>
+
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">South
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">West
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">East
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class = "checkbox">
+                <label>
+                  <input type="checkbox">Central
+                </label>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown district-dropdown-list">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">District <span class="caret"></span></a>
+
+          <ul class="dropdown-menu">
+            <%= form_tag("/output_to_map", method: :post, id:"output_to_map") do %>
+             <li style="padding-left: 10px;">
+                 <input type="checkbox" class="area-checkbox" name="North" value="North">
+                 <label for="North">North</label>
+             </li>
+             <li style="padding-left: 10px;">
+                 <input type="checkbox" class="area-checkbox" name="South" value="South">
+                 <label for="South">South</label>
+             </li>
+
+             <li style="padding-left: 10px;">
+                 <input type="checkbox" class="area-checkbox" name="East" value="East">
+                 <label for="East">East</label>
+             </li>
+             <li style="padding-left: 10px;">
+                 <input type="checkbox" class="area-checkbox" name="West" value="West">
+                 <label for="West">West</label>
+             </li>
+             <li style="padding-left: 10px;">
+                 <input type="checkbox" class="area-checkbox" name="Central" value="Central">
+                 <label for="Central">Central</label>
+             </li>
+             <% end %>
+              <li>
+
+        </ul>
+      </li>
+
+          </ul>
+        </li>
+      </ul>
+
+      <form class="navbar-form navbar-left">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+
+        <div class='navbar-form'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" placeholder="<%= Time.now.strftime("%m/%d/%Y %I:00 %p") %>" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div id="mapBody" >
+
+    <div style="height: 100%; width: 100%;"  id="map" ></div>
+
 <%= render 'layouts/nav' %>
+
+<%= render 'layouts/nav' %>
+
 
 <div id = "output_to_map_from_js">
   <%= render 'pages/output_to_map' %>
 </div>
+
+
+<script type="text/javascript">
+
+
+function initMap() {
+  // Create the map.
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 12,
+    center: {lat: 1.350452, lng:103.820581},
+    mapTypeId: 'roadmap'
+  });
+
+  var transitLayer = new google.maps.TransitLayer();
+  transitLayer.setMap(map);
+
+  var contentArray = [
+  //
+        '<div class="map-info-window">'+
+        '<h1>My Info Window</h1>'+
+        '<p>Circle 1</p>'+
+        '</div>',
+   //
+        '<div class="map-info-window">'+
+        '<h1>My Info Window</h1>'+
+        '<p>Circle 2</p>'+
+        '</div>',
+  //
+        '<div class="map-info-window">'+
+        '<h1>My Info Window</h1>'+
+        '<p>Circle 3</p>'+
+        '</div>',
+  //
+        '<div class="map-info-window">'+
+        '<h1>My Info Window</h1>'+
+        '<p>Circle 4</p>'+
+        '</div>',
+  //
+        '<div class="map-info-window">'+
+        '<h1>My Info Window</h1>'+
+        '<p>Circle 5</p>'+
+        '</div>',
+        ];
+
+  // Draw Circles
+  <% @areas.each_with_index do |areaCircle, index| %>
+
+     var coordinates = {lat: <%= areaCircle.lat %>,lng: <%= areaCircle.lng %>};
+
+     // var crowdDensityCircle = new google.maps.Circle({
+     //      strokeColor: '#FF0000',
+     //      strokeOpacity: 0.8,
+     //      strokeWeight: 3,
+     //      fillColor: '#FF0000',
+     //      fillOpacity: 0.35,
+     //      map: map,
+     //      center: coordinates,
+     //      radius: Math.random()*5000
+     //  });
+        var existingCrowdDensityCircle = {
+            path: google.maps.SymbolPath.CIRCLE,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 3,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            // adjust scale
+            scale: 20
+        };
+
+        var newCrowdDensityCircle_<%=index%> = new google.maps.Marker({
+        icon: existingCrowdDensityCircle,
+        position: coordinates
+        });
+
+        var contentString = contentArray[<%= index %>];
+
+        var infowindow_<%= index %> = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+        newCrowdDensityCircle_<%=index%>.setMap(map);
+
+        newCrowdDensityCircle_<%=index%>.addListener('click', function() {
+          infowindow_<%= index %>.open(map, newCrowdDensityCircle_<%=index%>);
+        });
+
+        <% end %>
+}
+
+
+
+ </script>
+
+<!-- this is for sizing the infowindow as below -->
+<style>
+.gm-style-iw {
+  width: 500px;
+  height: 500px;
+}
+</style>
+
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPS_KEY'] %>&callback=initMap&language=en&region=SG">
+    </script>
+
+    <div id="footer">
+        <div class="container" style="padding-top:65px; text-align: center;">
+          <a href="/contact">Contact Us</a> &nbsp; | &nbsp;
+          <a href="/faq">Faq</a>
+        </div>
+      </div>

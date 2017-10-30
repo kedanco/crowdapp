@@ -1,12 +1,22 @@
 #map{
   height: 100%;
   max-width:none;
+
 }
 
 #mapBody{
   height:100%;
 
-  top:50px;
+
+}
+
+.navbar{
+
+  position:sticky;
+  top:0;
+  left:0;
+  margin-bottom: 0px;
+
 }
 
 .navbar{
@@ -21,7 +31,14 @@
 
 html, body {
   height: 100%;
-  
+
+}
+
+#output_to_map_from_js{
+
+  height:100%;
+
+
 }
 
 #output_to_map_from_js{
