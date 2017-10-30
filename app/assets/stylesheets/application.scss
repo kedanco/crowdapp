@@ -22,117 +22,266 @@
 
 
 
-//Edit these
-$farColor: #ffe4c7;
-$nearColor: darken(cyan,30%);
-$layer: 7; //make sure it is +1 the ammount of layer divs in the html
-$perspective: 1;
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
-.bg {
+*, *:before, *:after {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color:white;
+}
+
+body, .horizontal-parent {overflow:hidden;}
+
+.horizontal-parent {
   position:absolute;
-  height:100%;
-  width:100%;
-  top:0px;
-  z-index:0;
-  background-color:$farColor;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
 }
 
-.layer {
-  position:fixed;
-  top:0px;
-  margin:auto;
-  width:100%;
-  z-index:100;
-  min-height:400px;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-position: top center;
-  background-repeat: no-repeat;
-}
+// number of slides
+$slides:4;
 
-.parallax {
-  height: 100vh;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  perspective: #{$perspective + px};
-}
+// This is the wrapper for the slides
+.horizontal-child {
+  position:relative;
+  display:block;
+  width:100vh;
+  height:100vw;
+  overflow:scroll;
+  transform-origin:100% 0%;
+  transform:rotate(-90deg) translateY(-100vh);
 
-.parallax-group {
-  position: relative;
-  height: 100vh;
-  transform-style: preserve-3d;
-}
+  // each slide should be the size of the viewport
+  .slide {
+    z-index:2;
+    display:flex;
+    position:absolute;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    text-align:center;
+    transform-origin:0% 0%;
 
-
-
-
-@for $i from 1 to $layer {
-  .parallax-group div:nth-child(#{$i}) {
-
-    //figure out best mixing math, this isn't true to the starting colors, doesnt scale that well
-    $mixedColor: mix($nearColor, $farColor, $i*15);
-    $randOffset: random(300)+px;
-    $zDepth: ($layer - $i)/0.5;
-
-    background-color:$farColor;
-    margin-top:#{300*($i+1) + px};
-    background-color:$mixedColor;
-    transform: translateZ(#{-($zDepth) + px}) scale(#{1 + (-($zDepth) * -1) / $perspective});
-
-    &:before {
-      content:"";
-      width:100%;
-      height:200px;
+    &:after {
+      content:'';
       position:absolute;
-      bottom:100%;
-      left:0;
-      background-image: linear-gradient(135deg, transparent 66%, $mixedColor 66.01%),
-                        linear-gradient(45deg, $mixedColor 34%, transparent 34.01%);
-      background-position: $randOffset 0px;
-      background-size: 200px 100%;
-      background-repeat:repeat-x;
+      background-image:linear-gradient(#A2BA0C, #A2BA0C);
+      // background-attachment fixed does the magic on the background
+      background-attachment:fixed;
+      background-position:0 0;
+      background-repeat:no-repeat;
+      z-index:-1;
     }
+
+    // As every .slide is positioned absolute, we translate each on the x-axis
+    // by nth * viewport-width >> so they sit next to each other
+    // like this: □□□□
+    // + rotate them by 90deg
+    // + slide them up by translate them on the y-axis by 100 viewport-height
+    @for $slide from 1 through $slides {
+      $perc:1 / $slides;
+      $i: ($slide - 1) * $perc;
+      $color:adjust-hue( red, ($slide * 10%) );
+      &:nth-child(#{$slide}) {
+        transform:rotate(90deg) translateY(-100%) translateX(($slide - 1) * 99.9vw);
+        background-color:$color;
+
+        // trail and error
+        // there's a logic behind it, but I got screwed up by all the rotations
+        &:after {
+          top: $slide * -100%;
+          left: $slide * -100%;
+          width: $slide * 200%;
+          height: $slide * 200%;
+          background-size:($slide * 200%) ($slide * 200%);
+          transform:scale(1-$i);
+        }
+      }
+    }
+
+  // center the content of each slide
+  // remember: we set the parent element to display:flex
+  .slide-heading {
+    margin:auto;
   }
 
-} //loop over
+  img {
+      display:block;
+      width:50%;
+      height:auto;
+      margin:auto;
+    }
+  }
+}
 
+#hand-left {fill:red;}
 
+// Some styling
 
-
-
-
-
-///Demo specific styling
-
-
-
-.content {
-  position:relative;
-  background-color:transparent;
-  font-family:"Arial";
-  letter-spacing:10px;
+.slide-heading h1 {
+  font-size:7vw;
+  font-weight:300;
   text-transform:uppercase;
-  line-height:40px;
-  z-index:10;
-  width:100%;
-  font-size:15px;
-  text-align:center;
-  color:white;
-  margin-top:1000px;
-  $zDepth: (1)/0.5;
-  transform: translateZ(#{-($zDepth) + px}) scale(#{1 + (-($zDepth) * -1) / $perspective});
+  letter-spacing:1vw;
+  // transform:rotate(180deg);
 }
 
-.fill {
-  height:80%; //?
+.slide-heading h2 {
+  font-size:2vw;
+  font-weight:300;
+  text-transform:uppercase;
+  letter-spacing:1vw;
 }
+
+
+
+
+// Hiding the scrollbar
+// for reference >> https://css-tricks.com/custom-scrollbars-in-webkit/
+
+.horizontal-child {
+  &::-webkit-scrollbar {
+    display:none;
+  }
+
+  &::-webkit-scrollbar-track {
+    display:none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    display:none;
+  }
+
+  &::-webkit-scrollbar-thumb:window-inactive {
+	  display:none;
+  }
+}
+
+
+
+
+
+
+// //Edit these
+// $farColor: #ffe4c7;
+// $nearColor: darken(cyan,30%);
+// $layer: 7; //make sure it is +1 the ammount of layer divs in the html
+// $perspective: 1;
+//
+// .bg {
+//   position:absolute;
+//   height:100%;
+//   width:100%;
+//   top:0px;
+//   z-index:0;
+//   background-color:$farColor;
+// }
+//
+// .layer {
+//   position:fixed;
+//   top:0px;
+//   margin:auto;
+//   width:100%;
+//   z-index:100;
+//   min-height:400px;
+//   top: 0; left: 0; right: 0; bottom: 0;
+//   background-position: top center;
+//   background-repeat: no-repeat;
+// }
+//
+// .parallax {
+//   height: 100vh;
+//   overflow-x: hidden;
+//   overflow-y: scroll;
+//   perspective: #{$perspective + px};
+// }
+//
+// .parallax-group {
+//   position: relative;
+//   height: 100vh;
+//   transform-style: preserve-3d;
+// }
+//
+//
+//
+//
+// @for $i from 1 to $layer {
+//   .parallax-group div:nth-child(#{$i}) {
+//
+//     //figure out best mixing math, this isn't true to the starting colors, doesnt scale that well
+//     $mixedColor: mix($nearColor, $farColor, $i*15);
+//     $randOffset: random(300)+px;
+//     $zDepth: ($layer - $i)/0.5;
+//
+//     background-color:$farColor;
+//     margin-top:#{300*($i+1) + px};
+//     background-color:$mixedColor;
+//     transform: translateZ(#{-($zDepth) + px}) scale(#{1 + (-($zDepth) * -1) / $perspective});
+//
+//     &:before {
+//       content:"";
+//       width:100%;
+//       height:200px;
+//       position:absolute;
+//       bottom:100%;
+//       left:0;
+//       background-image: linear-gradient(135deg, transparent 66%, $mixedColor 66.01%),
+//                         linear-gradient(45deg, $mixedColor 34%, transparent 34.01%);
+//       background-position: $randOffset 0px;
+//       background-size: 200px 100%;
+//       background-repeat:repeat-x;
+//     }
+//   }
+//
+// } //loop over
+//
+//
+//
+//
+//
+//
+//
+// ///Demo specific styling
+//
+//
+//
+// .content {
+//   position:relative;
+//   background-color:transparent;
+//   font-family:"Arial";
+//   letter-spacing:10px;
+//   text-transform:uppercase;
+//   line-height:40px;
+//   z-index:10;
+//   width:100%;
+//   font-size:15px;
+//   text-align:center;
+//   color:white;
+//   margin-top:1000px;
+//   $zDepth: (1)/0.5;
+//   transform: translateZ(#{-($zDepth) + px}) scale(#{1 + (-($zDepth) * -1) / $perspective});
+// }
+//
+// .fill {
+//   height:80%; //?
+// }
 
 // font animation
 .cool-link  {
     display: inline-block;
     color: white;
-    text-decoration: none;
 }
 
+.cool-link:hover  {
+    text-decoration: none;
+}
 
 
 .cool-link::after {
@@ -151,777 +300,8 @@ $perspective: 1;
 }
 
 // social
-$icon: 400 1em/50px 'FontAwesome';
+.social {
+  padding-top: 20px;
+  word-spacing: 35px;
 
-
-.social{
-  margin: 0 auto;
-  padding-top: 50px;
-  width: 400px;
-  padding-left: 20px;
-
-
-
-  ul{
-    li{
-      background: #43867e;
-      padding-left: 10px;
-      border-radius: 50%;
-      float: left;
-      height: 50px;
-      list-style: none;
-      margin: 0 10px;
-      width: 50px;
-
-      &:before{
-        font: $icon;
-      }
-
-      &:hover{
-        animation: transform .5s forwards, shadow 1s forwards;
-        -ms-animation: transform .5s forwards, shadow 1s forwards;
-        -moz-animation: transform .5s forwards, shadow 1s forwards;
-        -webkit-animation: transform .5s forwards, shadow 1s forwards;
-
-      }
-    }
-
-    .facebook{
-      &:hover{
-        background: #3b5998;
-
-      }
-
-      &:before{
-        color: #fff;
-        content:'\f09a';
-        display: block;
-        line-height: 50px;
-        text-align: center;
-      }
-    }
-
-    .twitter{
-      &:hover{
-        background: #00aced;
-      }
-
-      &:before{
-        color: #fff;
-        content:'\f099';
-        display: block;
-        line-height: 50px;
-        text-align: center;
-      }
-    }
-
-    .google{
-      &:hover{
-        background: #dd4b39;
-      }
-
-      &:before{
-        color: #fff;
-        content:'\f0d5';
-        display: block;
-        line-height: 50px;
-        text-align: center;
-      }
-    }
-
-    .instagram{
-      &:hover{
-        background: #517fa4;
-      }
-
-      &:before{
-        color: #fff;
-        content:'\f16d';
-        display: block;
-        line-height: 50px;
-        text-align: center;
-      }
-    }
-  }
 }
-
-@-webkit-keyframes transform {
-  from {
-    transform: translateY(0);
-    -webkit-transform: translateY(0);
-    -moz-transform: translateY(0);
-    -ms-transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-10px);
-    -webkit-transform: translateY(-10px);
-    -moz-transform: translateY(-10px);
-    -ms-transform: translateY(-10px);
-  }
-}
-
-@keyframes transform {
-  from {
-    transform: translateY(0);
-    -webkit-transform: translateY(0);
-    -moz-transform: translateY(0);
-    -ms-transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-10px);
-    -webkit-transform: translateY(-10px);
-    -moz-transform: translateY(-10px);
-    -ms-transform: translateY(-10px);
-  }
-}
-
-@-webkit-keyframes shadow {
-  from {
-    box-shadow: 0 0 0 rgba(0,0,0,.25);
-  }
-  to {
-    box-shadow: 0 0 0 10px rgba(0,0,0,0);
-  }
-}
-
-@keyframes shadow {
-  from {
-    box-shadow: 0 0 0 rgba(0,0,0,.25);
-  }
-  to {
-    box-shadow: 0 0 0 10px rgba(0,0,0,0);
-  }
-}
-
-
-
-
-
-// /* Resets */
-// html,
-// body,
-// nav,
-// p,
-// ul,
-// ul li,
-// .nav > li > a,
-// .social-btns > li > a,
-// form,
-// textarea {
-//
-//  margin: 0;
-// }
-//
-// a,
-// a:hover,
-// a:active,
-// a:visited {
-//  color: inherit;
-//  text-decoration: none !important;
-//  background: none !important;
-//  outline: none;
-// }
-//
-// button,
-// button:active,
-// input {
-//  // -webkit-appearance: none;
-//  // appearance: none;
-// }
-//
-// button,
-// button:active,
-// input,
-// textarea {
-//  outline: none;
-//  background: none;
-//  border: none;
-//  color: inherit;
-// }
-//
-// /* Bootstrap Changes */
-// .container {
-//  max-width: 1100px;
-// }
-//
-// @media (min-width: 520px) and (max-width: 767px) {
-//  .container {
-//    width: 500px;
-//  }
-// }
-//
-// .nav > .header__nav__item > a:hover {
-//  background: none;
-// }
-// .nav > .header__nav__item > a {
-//  display: inline;
-// }
-//
-// /* Generic Styles & Utility */
-//
-// .js-dis {
-//  display: none;
-// }
-//
-// .text-bold {
-//   font-family: 'Share Tech Mono', monospace;
-//
-//   font-weight: 700;
-// }
-//
-// a.global-button,
-// .global-button,
-// .heading,
-// .header__nav {
-//  font-size: 1.7em;
-//  font-family: 'Share Tech Mono', monospace;
-//
-// }
-//
-// a.global-button,
-// .global-button,
-// .heading {
-//  text-transform: uppercase;
-//  color: #51e6a6;
-// }
-//
-// .heading {
-//  margin: 0;
-//  margin-bottom: 2em;
-// }
-//
-// .header__social-btns > li > a:hover,
-// .filters__label:hover {
-//  color: #51e6a6;
-// }
-//
-// .header__social-btns > li > a,
-// .filters__label,
-// .credit-link {
-//  transition: all 250ms linear;
-// }
-//
-// .global-button::before {
-//  content:"";
-//  height: 1em;
-//  width: 1em;
-//  display: inline-block;
-//  position: relative;
-//  top: .2em; bottom: 0;
-//  background: url('https://eevu.github.io/img/arrow.svg') no-repeat;
-//  background-position: center;
-//  background-size: cover;
-//
-// }
-//
-// .global-button.rotated::before {
-//  transform: rotate(90deg);
-//  left: -.5em;
-// }
-//
-// /* ----- Page ----- */
-// html,
-// body {
-//  font-size: 100%;
-//  font-family: 'Share Tech Mono', monospace;
-//
-//  color: #6c6753;
-// }
-//
-// /*** Header ***/
-//
-// .header {
-//
-//  padding: 1.5em 6% 1em;
-//  position: fixed;
-//  width: 100%;
-//  background: #fff;
-//  z-index: 10;
-// }
-//
-// @media (min-width: 920px) {
-//  .header {
-//    padding-left: 6em;
-//    padding-right: 6em;
-//  }
-// }
-//
-// /* Nav */
-//
-// .header__nav,
-// .header__social-btns {
-//
-//  display: inline-block;
-//  margin-right: -4px;		/* solves inline-block whitespace issue */
-//  width: 50%;
-//  vertical-align: baseline;
-// }
-//
-// .header__nav {
-//  line-height: .9em;
-// }
-//
-// .header__nav__item > a {
-//  position: relative;
-// }
-//
-// .header__nav__item.is-active > a {
-//   font-family: 'Share Tech Mono', monospace;
-//
-//   font-weight: 700;
-// }
-//
-// .header__nav__item.is-active > a:hover {
-//  color: currentColor;
-// }
-//
-// .header__nav__item > a,
-// .header__nav__item > a::before {
-//  transition: all 350ms ease;
-// }
-//
-// .header__nav__item > a:hover {
-//  color: #51e6a6;
-// }
-//
-// .header__nav__item > a::before {
-//  position: absolute;
-//  top: 0;
-//  bottom: 0;
-//  overflow: visible;
-//  left: -7em;
-// }
-//
-// @media (max-width: 919px) {
-//  .header__nav__item > a::before {
-//    display: none;
-//  }
-// }
-//
-// .header__nav__item > a[data-ref='home']::before {
-//   content:url('https://eevu.github.io/img/about_icon.svg');
-// }
-//
-// .header__nav__item > a[data-ref='about']::before {
-//   content:url('https://eevu.github.io/img/portfolio_icon.svg');
-// }
-//
-// .header__nav__item > a[data-ref='contact']::before {
-//   content:url('https://eevu.github.io/img/contact_icon.svg');
-// }
-//
-// .header__nav__item > a:hover::before,
-// .header__nav__item.is-active > a::before {
-//  left: -2.5em;
-// }
-//
-// /* Collapsible Navigation */
-// .nav-toggle-wrapper {
-//  display: none;
-//  height: 2em;
-// }
-//
-// .nav-toggle-btn {
-//  display: inline;
-//  position: relative;
-//  height: 2em;
-//  width: 2em;
-//  cursor: pointer;
-// }
-//
-// .nav-toggle-btn > .line {
-//  display: block;
-//  position: absolute;
-//  top: 50%; left: 0; right: 0;
-//  height: .25em;
-//  background-color: #6c6753;
-//  transform: translateY(-50%);
-//  transform-origin: 50% 50%;
-//  transition: all 200ms linear;
-// }
-//
-// .nav-toggle-btn > .line:first-child {
-//  transform: translateY(-250%);
-// }
-//
-// .nav-toggle-btn > .line:last-child {
-//  transform: translateY(150%);
-// }
-//
-// /* icon animations */
-//
-// .nav-toggle-btn:hover > .line:first-child {
-//  transform: translateY(-300%);
-// }
-// .nav-toggle-btn:hover > .line:last-child {
-//  transform: translateY(200%);
-// }
-//
-// /* change icon appearance on expanded nav */
-// .nav-toggle-wrapper.expand > .nav-toggle-btn > .line:first-child {
-//  transform: translateY(-50%) rotate(45deg);
-// }
-//
-// .nav-toggle-wrapper.expand > .nav-toggle-btn > .line:nth-child(2) {
-//  transform: translateY(-50%) rotate(45deg);
-// }
-//
-// .nav-toggle-wrapper.expand > .nav-toggle-btn > .line:last-child {
-//  transform: translateY(-50%) rotate(-45deg);
-// }
-//
-// @media (max-width: 768px) {
-//  .header__nav {
-//    visibility: hidden;
-//    opacity: 0;
-//    position: absolute;
-//    top: 2em; left: 0;
-//    height: calc(100vh - 2em);
-//    width: 100%;
-//    text-align: center;
-//    line-height: 1.5em;
-//    background-color: #fff;
-//    padding-bottom: 2em;
-//    overflow: hidden;
-//    transition: opacity 400ms ease-out;
-//  }
-//
-//  .nav-toggle-wrapper {
-//    display: inline-block;
-//    width: 50%;
-//    margin-right: -4px;
-//  }
-//
-//  .nav-toggle-wrapper.expand + .header__nav {
-//    visibility: visible;
-//    opacity: 1;
-//  }
-//
-//  .header__nav > .nav {
-//    position: absolute;
-//    top: calc(50% - 2em); left: 0;
-//    width: 100%;
-//    transform: translateY(-50%);
-//  }
-// }
-//
-// /* Social Links */
-//
-// .header__social-btns {
-//  text-align: right;
-// }
-//
-// .header__social-btns > li {
-//  display: inline-block;
-// }
-//
-// .header__social-btns > li > a {
-//  position: relative;
-//  padding: 5px;
-// }
-//
-//
-// /* --- Sections --- */
-//
-// #home,
-// #about,
-// #contact {
-//  padding-top: 8.5em;
-// }
-//
-//
-// /*** home Section ***/
-// #home {
-//  display: flex;
-//  min-height: 100vh;
-// }
-//
-// #home .wrapper {
-//  max-width: 80%;
-//  margin: auto;
-//  margin-right: 10%
-// }
-// @media (min-width: 768px) {
-//  #home .wrapper {
-//    margin-right: 24%;
-//  }
-// }
-//
-// .home__intro {
-//  border-left: 2px solid;
-//  padding-left: 2.2em;
-//  margin-bottom: 1em;
-//  max-width: 25em;
-// }
-//
-// #home:hover .global-button.rotated::before {
-//  animation: move_arrow_v 2500ms ease-in infinite forwards;
-// }
-//
-// @keyframes move_arrow_v {
-//   0% {
-//     transform: rotate(90deg) translateX(0px);
-//   }
-//   50% {
-//     transform: rotate(90deg) translateX(0px);
-//   }
-//   60% {
-//     transform: rotate(90deg) translateX(8px);
-//   }
-//   70% {
-//     transform: rotate(90deg) translateX(0px);
-//   }
-//   80% {
-//     transform: rotate(90deg) translateX(8px);
-//   }
-//   90% {
-//     transform: rotate(90deg) translateX(0px);
-//   }
-//   100% {
-//     transform: rotate(90deg) translateX(0px);
-//   }
-// }
-//
-//
-// /*** about Section ***/
-//
-// /* Filters */
-// #about > .filters {
-//  text-align: right;
-//  padding: 0 20px;
-// }
-//
-// .filters__title {
-//   font-family: 'Share Tech Mono', monospace;
-//
-//   font-weight: 700;
-// }
-//
-// .filters__title,
-// .filters__list {
-//  display: inline-block;
-//  vertical-align: baseline;
-// }
-//
-// .filters__label,
-// .filters__label:not(:first-child)::before {
-//  color: #dcd5b2;
-// }
-//
-// .filters__label {
-//  display: inline-block;
-//  position: relative;
-//  margin-left: .8em;
-//  cursor: pointer;
-// }
-//
-// .filters__label.is-active {
-//  color: inherit;
-// }
-//
-// .filters__label:not(:first-child)::before {
-//  content: "/";
-//  margin-right: .8em;
-// }
-//
-// /* Projects */
-//
-// .about__project-wrapper {
-//  padding: 0 10px;
-// }
-//
-// .about__project {
-//  position: relative;
-//  height: auto;
-//  padding: 0;
-//  background-color: #f7fbde;
-//  background-clip: padding-box;
-//  border: 10px solid transparent;
-//  overflow: hidden;
-// }
-// .about__project__preview {
-//  position: relative;
-//  top: 0;
-//  height: auto;
-// }
-//
-// .about__project__preview > img {
-//  width: 100%;
-//  height: auto;
-// }
-//
-// .about__project__description {
-//  position: absolute;
-//  top: 100%;
-//  width: 100%;
-//  padding: 1.8em 1.3em;
-//  text-align: center;
-//  background: #fff;
-// }
-//
-// .about__project__name {
-//   font-family: 'Share Tech Mono', monospace;
-//
-//  font-size: 1.1em;
-//  margin: 0;
-//  margin-bottom: .2em;
-// }
-//
-// .about__project__category {
-//  font-size: .9em;
-//  color: #dcd5b2;
-//  margin-bottom: .6em;
-// }
-//
-// .about__project__preview,
-// .about__project__description {
-//  transition: all 600ms ease;
-// }
-//
-// .about__project:hover .about__project__description {
-//  transform: translateY(-100%);
-// }
-// .about__project:hover .about__project__preview {
-//  transform: translateY(-2.5em);
-// }
-//
-//
-//
-// /*** Contact Section - Footer ***/
-// footer {
-//  padding-bottom: 2em;
-// }
-//
-// .contact-form-wrapper {
-//  padding: 0 11%;
-//  z-index: 9;
-// }
-//
-// .contact-form {
-//  padding-bottom: 1em;
-// }
-//
-// @media (max-width: 991px) {
-//  footer.container {
-//    width: 100%;
-//  }
-// }
-//
-// @media (max-width: 520px) {
-//  .contact-form-wrapper {
-//    padding: 0 15px;
-//  }
-// }
-//
-// @media (min-width: 992px) {
-//  #contact {
-//    padding-left: 15px;
-//    padding-right: 15px;
-//  }
-//
-//  .contact-form {
-//    padding-right: 1.5em;
-//  }
-//
-//  .contact-form-wrapper {
-//    padding: 0;
-//  }
-// }
-//
-// .contact-form-el {
-//  position: relative;
-// }
-//
-// .contact-form-el > .input {
-//  display: block;
-//  width: 100%;
-//  margin-bottom: 1.3em;
-//  border-bottom: 2px solid;
-// }
-//
-// .contact-form-el > textarea {
-//  resize: both;
-//  min-width: 100%;
-//  min-height: 10em;
-//  height: 10em;
-//  background: #fff;	/* for usability on resize */
-// }
-//
-// .contact-form-el > label {
-//  font-size: 0.8em;
-//  position: absolute;
-//  top: .3em; left: 0;
-//  font-family: 'Share Tech Mono', monospace;
-//
-//   font-weight: 300;
-//  text-transform: uppercase;
-//  color: #dcd5b2;
-//  pointer-events: none;
-//  transition: all 300ms linear;
-// }
-//
-// .contact-form-el > .input:focus + label,
-// .contact-form-el > .input:valid + label {
-//  transform: translateY(-1.7em);
-//  transform-origin: bottom left;
-// }
-// .contact-form-el > .input:focus + label,
-// .contact-form-el > .input:focus:valid + label {
-//  color: #51e6a6;
-// }
-// .contact-form-el > .input:valid + label {
-//  color: #dcd5b2;
-// }
-//
-// .contact-form .global-button:hover::before {
-//  animation: move_arrow_h 1500ms ease-in infinite forwards;
-// }
-//
-// @keyframes move_arrow_h {
-//  0% {
-//    transform: translateX(0px);
-//  }
-//  15% {
-//    transform: translateX(-6px);
-//  }
-//  30% {
-//    transform: translateX(0px);
-//  }
-//  45% {
-//    transform: translateX(-6px);
-//  }
-//  60% {
-//    transform: translateX(0px);
-//  }
-//  100% {
-//    transform: translateX(0px);
-//  }
-// }
-//
-//
-// #map {
-//  padding: 0;
-//  background-color: #f7fbde;
-//  height: 20em;
-// }
-// @media (min-width: 768px) {
-//  #map {
-//    height: 25em;
-//  }
-// }
-//
-// footer > #credit {
-//  font-size: 0.8em;
-//  margin-top: 4em;
-//  text-align: center;
-// }
-//
-// .credit-link, .credit-link:hover {
-//  text-decoration: underline !important;
-// }
-//
-// .credit-link:hover {
-//   color: #51e6a6;
-// }
