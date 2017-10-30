@@ -129,11 +129,9 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-
 <div id="mapBody" >
 
-    <div style="height: 100%; width: 100%;" id="map" ></div>
-
+    <div style="height: 100%; width: 100%;"  id="map" ></div>
 
 </div>
 
@@ -232,7 +230,7 @@ function initMap() {
 <!-- this is for sizing the infowindow as below -->
 <style>
 .gm-style-iw {
-  width: 500px; 
+  width: 500px;
   height: 500px;
 }
 </style>
@@ -240,3 +238,10 @@ function initMap() {
   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPS_KEY'] %>&callback=initMap&language=en&region=SG">
     </script>
+
+    <div id="footer">
+        <div class="container" style="padding-top:65px; text-align: center;">
+          <a href="/contact">Contact Us</a> &nbsp; | &nbsp;
+          <a href="/faq">Faq</a>
+        </div>
+      </div>
