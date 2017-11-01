@@ -1,5 +1,5 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid" style="z-index: 9999;">
+<nav class="navbar navbar-default" style="z-index: 9999; color: black;">
+  <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -25,6 +25,7 @@
             <li><a id="AreaButton" href="#">Area</a></li>
             <li><a id="DistrictButton" href="#">District</a></li>
             <li><a href="#">Crowded</a></li>
+
           </ul>
         </li>
 
@@ -56,20 +57,6 @@
                  <input type="checkbox" class="area-checkbox" name="area_checkbox[]" value="central">
                  <label for="area_checkbox">Central</label>
              </li>
-          </ul>
-        </li>
-
-        <li class="dropdown district-dropdown-list">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">District <span class="caret"></span></a>
-
-          <ul class="dropdown-menu list-district-checkbox">
-
-            <% @districts.each do |district| %>
-             <li>
-                 <input type="checkbox" class="district-checkbox" name="district_checkbox[]" value="<%=district.name%>">
-                 <label for="district_checkbox"><%= district.name %></label>
-             </li>
-            <% end %>
           </ul>
         </li>
 
