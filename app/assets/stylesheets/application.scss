@@ -35,7 +35,7 @@ body {
   color:white;
 }
 
-body, .horizontal-parent {overflow:hidden;}
+.horizontal-parent {overflow:hidden;}
 
 .horizontal-parent {
   position:absolute;
@@ -304,4 +304,15 @@ $slides:4;
   padding-top: 20px;
   word-spacing: 35px;
 
+}
+
+
+.footer {
+  height: 80px;
+  color: black;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 30px;
+  text-align: center;
 }
