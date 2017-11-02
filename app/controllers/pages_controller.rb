@@ -22,7 +22,11 @@ class PagesController < ApplicationController
     @districts = District.all
 
     area_value = params[:area_checkbox]
-    @areas = Area.where(name: area_value)   
+    search_result = params[:search_result]
+    crowdlevel = params[:crowdlevel]
+    datetime = params[:date_time]
+
+    @areas = Area.where(name: area_value)  
     # render "pages/home"  
 
     respond_to do |format|
