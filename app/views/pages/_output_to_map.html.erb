@@ -47,7 +47,29 @@ function initMap() {
         ];
 
   // Draw Circles
+
+  function getColor(d) {
+    console.log(d);
+    return d > 1000 ? '#FF0000' :
+           d > 800  ? '#FF3300' :
+           d > 600  ? '#FF6600' :
+           d > 400  ? '#FF9900' :
+           d > 200  ? '#FFCC00' :
+           d > 100  ? '#FFFF00' :
+           d > 80   ? '#CCFF00' :
+           d > 60   ? '#99FF00' :
+           d > 40   ? '#66FF00' :
+           d > 20   ? '#33FF00' :
+                      '#00FF00';
+
+}
+
   <% @areas.each_with_index do |areaCircle, index| %>
+
+
+    <% crowdlevel = areaCircle.crowd_levels.where(hour: 6,day: "Friday") %>
+    <% density = (crowdlevel.first).crowd_density %>
+    console.log(<%= density %>);
 
      var coordinates = {lat: <%= areaCircle.lat %>,lng: <%= areaCircle.lng %>};
 
@@ -63,10 +85,10 @@ function initMap() {
      //  });
         var existingCrowdDensityCircle = {
             path: google.maps.SymbolPath.CIRCLE,
-            strokeColor: '#FF0000',
+            strokeColor: getColor(<%= density %>),
             strokeOpacity: 0.8,
             strokeWeight: 3,
-            fillColor: '#FF0000',
+            fillColor: getColor(<%= density %>),
             fillOpacity: 0.35,
             // adjust scale
             scale: 20

@@ -31,7 +31,7 @@ class ImportService
 
       newAr = Area.find_or_create_by!(name: key, lat: value[0], lng: value[1])
       puts newAr
-      
+
     end
 
     puts "#{Area.count} areas created."
@@ -83,11 +83,11 @@ class ImportService
       [7,8],
       [14,15,16],
       [9,10],
-      [11,12,13], 
+      [11,12,13],
       [17],
       [18,19],
       [20,21],
-      [22,23],  
+      [22,23],
       [24,25,26,27],
       [28,29,30],
       [31,32,33],
@@ -132,7 +132,7 @@ class ImportService
        "Ardmore, Bukit Timah, Holland Road, Tanglin",
        "Watten Estate, Novena, Thomson",
        "Balestier, Toa Payoh, Serangoon",
-       "Macpherson, Braddell",     
+       "Macpherson, Braddell",
        "Geylang, Eunos",
        "Katong, Joo Chiat, Amber Road",
        "Bedok, Upper East Coast, Eastwood, Kew Drive",
@@ -161,7 +161,7 @@ class ImportService
         lat: @district_coordinates[index].first,
         lng: @district_coordinates[index].last,
         area_id: Area.find_by(name: area_name).id
-      ) 
+      )
 
     end
 
@@ -170,7 +170,7 @@ class ImportService
 
   end
 
-  # Assigns areas' & districts' crowd_level objects from the averages of places' crowd_levels 
+  # Assigns areas' & districts' crowd_level objects from the averages of places' crowd_levels
   def self.initCrowdDensity
 
     start = Time.now
@@ -226,7 +226,7 @@ class ImportService
               (total_density_places[day][hour]).nil? ? (total_density_places[day][hour] = level.crowd_density) : (total_density_places[day][hour] += level.crowd_density)
 
             end
-            
+
           end
 
           total_density_places.each do |day,levels|
@@ -308,7 +308,7 @@ class ImportService
     ImportService.initArea()
     ImportService.initDistrict()
 
-    if CrowdLevel.blank?
+    if CrowdLevel.count == 0
 
       start = Time.now
       puts "initializing restaurants..."
@@ -369,7 +369,7 @@ class ImportService
           crowd_level_data = JSON.parse dataString.gsub(/\s+/, "").gsub("'",'"')
 
           crowd_level_data.each do |dataset|
-            
+
             day = dataset["name"]
 
             # hour refers to start of hour: '0' means midnight-1am

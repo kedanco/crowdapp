@@ -16,7 +16,6 @@
     <% if @minimum_password_length %>
     <em>(<%= @minimum_password_length %> characters minimum)</em>
     <% end %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
   </div>
 
   <div class="field">
@@ -41,13 +40,13 @@
         <h1 class="user__title">Sign Up</h1>
     </header>
 
-    <form class="form">
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {class: "form abc"}) do |f| %>
         <div class="form__group">
             <input type="text" placeholder="Username" class="form__input" />
         </div>
 
         <div class="form__group">
-            <input type="email" placeholder="Email" class="form__input" />
+            <%= f.email_field :email, autofocus: true, placeholder: "Email", class: "form__input" %>
         </div>
 
         <div class="form__group">
@@ -57,5 +56,5 @@
         <button class="button1" type="button">Register</button>
         <%= render "devise/shared/links" %>
         <a href="/#home">Back</a>
-    </form>
+    <% end %>
 </div>
