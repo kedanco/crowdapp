@@ -20,33 +20,70 @@ function initMap() {
 
   var contentArray = [
   //
-        '<div class="map-info-window">'+
-        '<h1>My Info Window</h1>'+
-        '<p>Circle 1</p>'+
-        '</div>',
+        // '<div class="map-info-window">'+
+        // '<h1>My Info Window</h1>'+
+        // '<p>Circle 1</p>'+
+        // '</div>',
+
+        '<li class="map-marker map-marker-circle1">' +
+          '<div class="map-marker-info">' +
+            '<div class="map-marker-info-inner animate-bounce-in">' +
+                '<h2 style="color:black;">Circle 1</h2>' +
+              '<main>' +
+                '<p style="color:black;">Hello this shows what is in circle 1.</p>' +
+              '</main>' +
+            '</div>' +
+          '</div>' +
+        '</li>' ,
+
    //
-        '<div class="map-info-window">'+
-        '<h1>My Info Window</h1>'+
-        '<p>Circle 2</p>'+
-        '</div>',
+       '<li class="map-marker map-marker-circle2">' +
+         '<div class="map-marker-info">' +
+           '<div class="map-marker-info-inner animate-bounce-in">' +
+               '<h2 style="color:black;">Circle 2</h2>' +
+             '<main>' +
+               '<p style="color:black;">This shows what is in circle 2.</p>' +
+             '</main>' +
+           '</div>' +
+         '</div>' +
+       '</li>' ,
   //
-        '<div class="map-info-window">'+
-        '<h1>My Info Window</h1>'+
-        '<p>Circle 3</p>'+
-        '</div>',
+        '<li class="map-marker map-marker-circle3">' +
+          '<div class="map-marker-info">' +
+            '<div class="map-marker-info-inner animate-bounce-in">' +
+                '<h2 style="color:black;">Circle 3</h2>' +
+              '<main>' +
+                '<p style="color:black;">This shows what is in circle 3.</p>' +
+              '</main>' +
+            '</div>' +
+          '</div>' +
+        '</li>' ,
   //
-        '<div class="map-info-window">'+
-        '<h1>My Info Window</h1>'+
-        '<p>Circle 4</p>'+
-        '</div>',
+        '<li class="map-marker map-marker-circle4">' +
+          '<div class="map-marker-info">' +
+            '<div class="map-marker-info-inner animate-bounce-in">' +
+                '<h2 style="color:black;">Circle 4</h2>' +
+              '<main>' +
+                '<p style="color:black;">This shows what is in circle 4.</p>' +
+              '</main>' +
+            '</div>' +
+          '</div>' +
+        '</li>' ,
   //
-        '<div class="map-info-window">'+
-        '<h1>My Info Window</h1>'+
-        '<p>Circle 5</p>'+
-        '</div>',
+        '<li class="map-marker map-marker-circle5">' +
+          '<div class="map-marker-info">' +
+            '<div class="map-marker-info-inner animate-bounce-in">' +
+                '<h2 style="color:black;">Circle 5</h2>' +
+              '<main>' +
+                '<p style="color:black;">This shows what is in circle 5.</p>' +
+              '</main>' +
+            '</div>' +
+          '</div>' +
+        '</li>' ,
         ];
 
   // Draw Circles
+
 
   function getColor(d) {
     console.log(d);
@@ -83,6 +120,8 @@ function initMap() {
      //      center: coordinates,
      //      radius: Math.random()*5000
      //  });
+
+
         var existingCrowdDensityCircle = {
             path: google.maps.SymbolPath.CIRCLE,
             strokeColor: getColor(<%= density %>),
@@ -92,7 +131,10 @@ function initMap() {
             fillOpacity: 0.35,
             // adjust scale
             scale: 20
+
         };
+
+
 
         var newCrowdDensityCircle_<%=index%> = new google.maps.Marker({
         icon: existingCrowdDensityCircle,
