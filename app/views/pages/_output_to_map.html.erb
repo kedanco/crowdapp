@@ -154,22 +154,62 @@ function initMap() {
         });
 
         <% end %>
+
+        // creating search_place marker clusters as below
+    var markers = [];
+      <% if @search_place != nil %>
+        var infowindow_of_each_marker = new Array(<%=@search_place.count%>)
+        <% @search_place.each_with_index do |search_place, index| %>
+
+        infowindow_of_each_marker[<%=index%>] =
+          '<div>Place: <%=search_place.name%> </div>' +
+          '<div>Address: <%=search_place.address%></div>'
+
+
+        var place_coord = {lat: <%= search_place.lat %>,lng: <%= search_place.lng %>};
+
+        var marker = new google.maps.Marker({
+                position: place_coord,
+        });
+
+        var infoWin = new google.maps.InfoWindow();
+
+        google.maps.event.addListener(marker, 'click', function(evt) {
+          infoWin.setContent(infowindow_of_each_marker[<%=index%>]);
+          infoWin.open(map, marker);
+        })
+
+        markers.push(marker);
+            
+        <% end %>
+      <% end %>
+
+    var options = {
+            imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+    };
+
+    var markerCluster = new MarkerClusterer(map, markers, options);
 }
+</script>
 
-
-
-
-
-
- </script>
+<!-- make the wordings of infowindow visible -->
+<style>
+div{
+  color: black;
+}
+</style>
 
 <!-- this is for sizing the infowindow as below -->
 <style>
-/*.gm-style-iw {
-  width: 500px;
-  height: 500px;
-}*/
+.gm-style-iw {
+  width: 100px;
+  height: 100px;
+}
 </style>
+
+<!-- this is needed for the markercluster -->
+  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+  </script>
 
   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPS_KEY'] %>&callback=initMap&language=en&region=SG">

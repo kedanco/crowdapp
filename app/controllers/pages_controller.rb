@@ -10,7 +10,8 @@ class PagesController < ApplicationController
   end
 
   def home
-    @areas = Area.all
+    # @areas = Area.all
+    @areas = Area.where.not(name: "east")
 
     @districts = District.all
     # @district_names = ImportService.initDistrict
@@ -22,9 +23,20 @@ class PagesController < ApplicationController
     @districts = District.all
 
     area_value = params[:area_checkbox]
-    search_result = params[:search_result]
+    search_place = params[:search_result]
     crowdlevel = params[:crowdlevel]
     datetime = params[:date_time]
+
+    if search_place != "" then 
+      @search_place = Place.where("name ilike ?", "%#{search_place}%")
+      
+      if @search_place ==[]
+        # display msgbox when query database not found
+      end
+
+      else
+        # display msgbox when click blank in search
+    end
 
     @areas = Area.where(name: area_value)  
     # render "pages/home"  
