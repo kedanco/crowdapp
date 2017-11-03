@@ -172,11 +172,13 @@ function initMap() {
                 position: place_coord,
         });
 
-        var infoWin = new google.maps.InfoWindow();
-
         google.maps.event.addListener(marker, 'click', function(evt) {
-          infoWin.setContent(infowindow_of_each_marker[<%=index%>]);
-          infoWin.open(map, marker);
+          var infowindow = new google.maps.InfoWindow({                
+            map: map,
+            position: place_coord,                                
+            content: infowindow_of_each_marker[<%=index%>]
+          })
+          infowindow.open(map, this);         
         })
 
         markers.push(marker);

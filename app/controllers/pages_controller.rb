@@ -29,7 +29,6 @@ class PagesController < ApplicationController
 
     if search_place != "" then 
       @search_place = Place.where("name ilike ?", "%#{search_place}%")
-      
       if @search_place ==[]
         # display msgbox when query database not found
       end
