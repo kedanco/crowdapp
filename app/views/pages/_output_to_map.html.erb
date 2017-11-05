@@ -20,33 +20,70 @@ function initMap() {
 
   var contentArray = [
   //
-        '<div class="map-info-window">'+
-        '<h1>My Info Window</h1>'+
-        '<p>Circle 1</p>'+
-        '</div>',
+        // '<div class="map-info-window">'+
+        // '<h1>My Info Window</h1>'+
+        // '<p>Circle 1</p>'+
+        // '</div>',
+
+        '<li class="map-marker map-marker-circle1">' +
+          '<div class="map-marker-info">' +
+            '<div class="map-marker-info-inner animate-bounce-in">' +
+                '<h2 style="color:black;">Circle 1</h2>' +
+              '<main>' +
+                '<p style="color:black;">Hello this shows what is in circle 1.</p>' +
+              '</main>' +
+            '</div>' +
+          '</div>' +
+        '</li>' ,
+
    //
-        '<div class="map-info-window">'+
-        '<h1>My Info Window</h1>'+
-        '<p>Circle 2</p>'+
-        '</div>',
+       '<li class="map-marker map-marker-circle2">' +
+         '<div class="map-marker-info">' +
+           '<div class="map-marker-info-inner animate-bounce-in">' +
+               '<h2 style="color:black;">Circle 2</h2>' +
+             '<main>' +
+               '<p style="color:black;">This shows what is in circle 2.</p>' +
+             '</main>' +
+           '</div>' +
+         '</div>' +
+       '</li>' ,
   //
-        '<div class="map-info-window">'+
-        '<h1>My Info Window</h1>'+
-        '<p>Circle 3</p>'+
-        '</div>',
+        '<li class="map-marker map-marker-circle3">' +
+          '<div class="map-marker-info">' +
+            '<div class="map-marker-info-inner animate-bounce-in">' +
+                '<h2 style="color:black;">Circle 3</h2>' +
+              '<main>' +
+                '<p style="color:black;">This shows what is in circle 3.</p>' +
+              '</main>' +
+            '</div>' +
+          '</div>' +
+        '</li>' ,
   //
-        '<div class="map-info-window">'+
-        '<h1>My Info Window</h1>'+
-        '<p>Circle 4</p>'+
-        '</div>',
+        '<li class="map-marker map-marker-circle4">' +
+          '<div class="map-marker-info">' +
+            '<div class="map-marker-info-inner animate-bounce-in">' +
+                '<h2 style="color:black;">Circle 4</h2>' +
+              '<main>' +
+                '<p style="color:black;">This shows what is in circle 4.</p>' +
+              '</main>' +
+            '</div>' +
+          '</div>' +
+        '</li>' ,
   //
-        '<div class="map-info-window">'+
-        '<h1>My Info Window</h1>'+
-        '<p>Circle 5</p>'+
-        '</div>',
+        '<li class="map-marker map-marker-circle5">' +
+          '<div class="map-marker-info">' +
+            '<div class="map-marker-info-inner animate-bounce-in">' +
+                '<h2 style="color:black;">Circle 5</h2>' +
+              '<main>' +
+                '<p style="color:black;">This shows what is in circle 5.</p>' +
+              '</main>' +
+            '</div>' +
+          '</div>' +
+        '</li>' ,
         ];
 
   // Draw Circles
+
 
   function getColor(d) {
     console.log(d);
@@ -83,6 +120,8 @@ function initMap() {
      //      center: coordinates,
      //      radius: Math.random()*5000
      //  });
+
+
         var existingCrowdDensityCircle = {
             path: google.maps.SymbolPath.CIRCLE,
             strokeColor: getColor(<%= density %>),
@@ -92,7 +131,10 @@ function initMap() {
             fillOpacity: 0.35,
             // adjust scale
             scale: 20
+
         };
+
+
 
         var newCrowdDensityCircle_<%=index%> = new google.maps.Marker({
         icon: existingCrowdDensityCircle,
@@ -112,19 +154,64 @@ function initMap() {
         });
 
         <% end %>
+
+        // creating search_place marker clusters as below
+    var markers = [];
+      <% if @search_place != nil %>
+        var infowindow_of_each_marker = new Array(<%=@search_place.count%>)
+        <% @search_place.each_with_index do |search_place, index| %>
+
+        infowindow_of_each_marker[<%=index%>] =
+          '<div>Place: <%=search_place.name%> </div>' +
+          '<div>Address: <%=search_place.address%></div>'
+
+
+        var place_coord = {lat: <%= search_place.lat %>,lng: <%= search_place.lng %>};
+
+        var marker = new google.maps.Marker({
+                position: place_coord,
+        });
+
+        google.maps.event.addListener(marker, 'click', function(evt) {
+          var infowindow = new google.maps.InfoWindow({                
+            map: map,
+            position: place_coord,                                
+            content: infowindow_of_each_marker[<%=index%>]
+          })
+          infowindow.open(map, this);         
+        })
+
+        markers.push(marker);
+            
+        <% end %>
+      <% end %>
+
+    var options = {
+            imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+    };
+
+    var markerCluster = new MarkerClusterer(map, markers, options);
 }
+</script>
 
-
-
- </script>
+<!-- make the wordings of infowindow visible -->
+<style>
+div{
+  color: black;
+}
+</style>
 
 <!-- this is for sizing the infowindow as below -->
 <style>
 .gm-style-iw {
-  width: 500px;
-  height: 500px;
+  width: 100px;
+  height: 100px;
 }
 </style>
+
+<!-- this is needed for the markercluster -->
+  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+  </script>
 
   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPS_KEY'] %>&callback=initMap&language=en&region=SG">

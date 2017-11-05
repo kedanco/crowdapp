@@ -10,7 +10,8 @@ class PagesController < ApplicationController
   end
 
   def home
-    @areas = Area.all
+    # @areas = Area.all
+    @areas = Area.where.not(name: "east")
 
     @districts = District.all
     # @district_names = ImportService.initDistrict
@@ -30,7 +31,15 @@ class PagesController < ApplicationController
 
     # Get search results
 
-    search_places = Place.where("name LIKE %search_value%")
+    if search_places != "" then 
+      @search_places = Place.where("name ilike ?", "%#{search_place}%")
+      if @search_places ==[]
+        # display msgbox when query database not found
+      end
+
+      else
+        # display msgbox when click blank in search
+    end
 
     # Implement filters on search_places
 
@@ -82,6 +91,9 @@ class PagesController < ApplicationController
       }
 
     end
+
+
+    
 
     @areas = Area.where(name: area_value)  
     # render "pages/home"  

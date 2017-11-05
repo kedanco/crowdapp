@@ -47,3 +47,174 @@ html, body {
 
 
 }
+
+// info window
+
+// Variables
+
+$font-size: 1em;
+$font-weight: 400;
+
+$line-height: 1.5em;
+
+$headings-font-weight: 600;
+$h1-font-size: 2.5em;
+$h2-font-size: 1.5em;
+$h3-font-size: 1.25em;
+
+
+// Base
+
+* {
+  box-sizing: border-box;
+
+  &:before,
+  &:after {
+    box-sizing: border-box;
+  }
+
+}
+
+
+
+h1,
+h2,
+h3 {
+  font-weight: $headings-font-weight;
+}
+
+h1,
+.h1 {
+  font-size: $h1-font-size;
+  margin: 0 0 .2em;
+}
+
+h2,
+.h2 {
+  font-size: $h2-font-size;
+  margin: 0 0 .33em;
+}
+
+h3,
+.h3 {
+  font-size: $h3-font-size;
+  margin: 0 0 .5em;
+}
+
+p {
+  margin: .5em 0;
+}
+
+svg {
+  height: auto;
+  max-width: 100%;
+}
+
+// Heplers
+
+.text-center {
+  text-align: center;
+}
+
+.subline {
+  font-weight: normal;
+}
+
+// rid
+
+.container {
+  left: 50%;
+  max-width: 740px;
+  position: absolute;
+  top: 100%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+// Map
+
+
+    header {
+      border-radius: .5em .5em 0 0;
+
+      padding: .5em 1em;
+    }
+
+    main {
+
+      border-radius: 0 0 .5em .5em;
+
+    }
+
+    h2 {
+      margin-bottom: 0;
+    }
+
+// Animations
+
+.animate {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+@keyframes bounce-in {
+
+  0%, 20%, 40%, 60%, 80%, 100% {
+    transition-timing-function: cubic-bezier(.215, .610, .355, 1);
+  }
+
+  0% {
+    opacity: 0;
+    transform: scale3d(.3, .3, .3);
+  }
+
+  20% {
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+
+  40% {
+    transform: scale3d(.9, .9, .9);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+
+  80% {
+    transform: scale3d(.97, .97, .97);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+
+}
+
+.animate-bounce-in {
+  animation-duration: .75s;
+  animation-name: bounce-in;
+}
+
+@keyframes pop {
+
+  0% {
+    transform: scale(0);
+  }
+
+  8% {
+    opacity: .4;
+  }
+
+  10% {
+    opacity: 0;
+    transform: scale(1);
+  }
+
+}
+
+.animate-pop {
+  animation-duration: 1s;
+  animation-name: pop;
+}
