@@ -90,10 +90,7 @@ class PagesController < ApplicationController
 
       }
 
-    end
-
-
-    
+    end 
 
     @areas = Area.where(name: area_value)  
     # render "pages/home"  
