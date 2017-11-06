@@ -20,6 +20,8 @@ class PagesController < ApplicationController
   end
 
   def output_to_map
+    @areas = Area.where.not(name: "east")
+
     @districts = District.all
 
     search_value = params[:search_result]
@@ -32,15 +34,17 @@ class PagesController < ApplicationController
     # Get search results
 
     if search_value != ""
-      search_places = Place.where("name ilike ?", "%#{search_place}%")
-      if search_places == []
+      @search_places = Place.where("name ilike ?", "%#{search_value}%")
+      if @search_places == []
         # display msgbox when query database not found
-    
-
-      else
-        # display msgbox when click blank in search
+      
       end
+    else
+        # display msgbox when click blank in search
+  
     end
+
+    search_places = search_places.to_a
 
     # Implement filters on search_places
 
@@ -51,23 +55,28 @@ class PagesController < ApplicationController
 
     end
 
-    # Date & Time Filter
-    if datetime_value != nil
+    # # Date & Time Filter
+    # if datetime_value == ""
 
-      search_places.delete_if{ |place|
+    #   datetime_value = DateTime.now
 
-        hour = datetime_value.strftime("%H")
-        day = datetime_value.strftime("%A")
+    # end
 
-        place.each do |crowd_level|
+    #   search_places.delete_if{ |place|
 
-           (crowd_level.hour != hour) || (crowd_level.day != day)
+    #     hour = datetime_value.strftime("%H")
+    #     day = datetime_value.strftime("%A")
 
-        end
+    #     cl = place.crowd_levels
+    #     cl.each do |crowd_level|
 
-      }
+    #        (crowd_level.hour != hour) || (crowd_level.day != day)
 
-    end
+    #     end
+
+    #   }
+
+    
 
     # Crowded/Not Crowded Filter
     if crowdlevel_value != nil
@@ -79,11 +88,11 @@ class PagesController < ApplicationController
 
           if crowdlevel_value == crowded
 
-            crowd_level.crowd_density > 75
+            crowd_level.crowd_density < 75
 
           elsif crowdlevel_value == not_crowded
 
-            crowd_level.crowd_density < 25
+            crowd_level.crowd_density > 25
 
           end
       }
