@@ -31,14 +31,15 @@ class PagesController < ApplicationController
 
     # Get search results
 
-    if search_places != "" then 
-      @search_places = Place.where("name ilike ?", "%#{search_place}%")
-      if @search_places ==[]
+    if search_value != ""
+      search_places = Place.where("name ilike ?", "%#{search_place}%")
+      if search_places == []
         # display msgbox when query database not found
-      end
+    
 
       else
         # display msgbox when click blank in search
+      end
     end
 
     # Implement filters on search_places
@@ -85,15 +86,9 @@ class PagesController < ApplicationController
             crowd_level.crowd_density < 25
 
           end
-
-        end
-
       }
 
-    end 
-
-    @areas = Area.where(name: area_value)  
-    # render "pages/home"  
+    end  
 
     respond_to do |format|
       format.js   
