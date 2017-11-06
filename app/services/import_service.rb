@@ -233,7 +233,7 @@ class ImportService
 
             levels.each_with_index do |level, hour|
 
-              average_level = (level/places.count).ceil if level != 0
+              level == 0 ? average_level = 0 : (average_level = (level/places.count).ceil)
 
               crowd_level = CrowdLevel.find_or_create_by!(
 
@@ -254,7 +254,7 @@ class ImportService
 
             levels.each_with_index do |level,hour|
 
-              average_level = (level/districts.count).ceil if level != 0
+              level == 0 ? average_level = 0 : (average_level = (level/districts.count).ceil)
 
               crowd_level = CrowdLevel.find_or_create_by!(
 
@@ -333,7 +333,7 @@ class ImportService
               @exceptions << row['name'] + " " + row['address']
               puts "added #{row['name']} to exception list."
               puts "skipping row..."
-              sleep(3)
+              sleep(1)
               next
 
             end
@@ -344,10 +344,12 @@ class ImportService
 
           two_digit_postalcode = postalcode[0..1]
 
-          dist_id = @district_codes.index{ |codes| codes.include?(two_digit_postalcode.to_i) } +1
+          ind = @district_codes.index{ |codes| codes.include?(two_digit_postalcode.to_i) }
+
+          ind == nil ? next : dist_id = ind + 1 
 
           puts "dist_id is #{dist_id}"
-          place = Place.create!(
+          place = Place.find_or_create_by!(
             name: row['name'],
             address: row['address'],
             place_type: "restaurant",
@@ -375,7 +377,7 @@ class ImportService
             # hour refers to start of hour: '0' means midnight-1am
             dataset["data"].each_with_index do |density, hour|
 
-              crowd_level = CrowdLevel.create!(
+              crowd_level = CrowdLevel.find_or_create_by!(
 
                 hour: hour,
                 day: day,

@@ -18,72 +18,7 @@ function initMap() {
   var transitLayer = new google.maps.TransitLayer();
   transitLayer.setMap(map);
 
-  var contentArray = [
-  //
-        // '<div class="map-info-window">'+
-        // '<h1>My Info Window</h1>'+
-        // '<p>Circle 1</p>'+
-        // '</div>',
-
-        '<li class="map-marker map-marker-circle1">' +
-          '<div class="map-marker-info">' +
-            '<div class="map-marker-info-inner animate-bounce-in">' +
-                '<h2 style="color:black;">Circle 1</h2>' +
-              '<main>' +
-                '<p style="color:black;">Hello this shows what is in circle 1.</p>' +
-              '</main>' +
-            '</div>' +
-          '</div>' +
-        '</li>' ,
-
-   //
-       '<li class="map-marker map-marker-circle2">' +
-         '<div class="map-marker-info">' +
-           '<div class="map-marker-info-inner animate-bounce-in">' +
-               '<h2 style="color:black;">Circle 2</h2>' +
-             '<main>' +
-               '<p style="color:black;">This shows what is in circle 2.</p>' +
-             '</main>' +
-           '</div>' +
-         '</div>' +
-       '</li>' ,
-  //
-        '<li class="map-marker map-marker-circle3">' +
-          '<div class="map-marker-info">' +
-            '<div class="map-marker-info-inner animate-bounce-in">' +
-                '<h2 style="color:black;">Circle 3</h2>' +
-              '<main>' +
-                '<p style="color:black;">This shows what is in circle 3.</p>' +
-              '</main>' +
-            '</div>' +
-          '</div>' +
-        '</li>' ,
-  //
-        '<li class="map-marker map-marker-circle4">' +
-          '<div class="map-marker-info">' +
-            '<div class="map-marker-info-inner animate-bounce-in">' +
-                '<h2 style="color:black;">Circle 4</h2>' +
-              '<main>' +
-                '<p style="color:black;">This shows what is in circle 4.</p>' +
-              '</main>' +
-            '</div>' +
-          '</div>' +
-        '</li>' ,
-  //
-        '<li class="map-marker map-marker-circle5">' +
-          '<div class="map-marker-info">' +
-            '<div class="map-marker-info-inner animate-bounce-in">' +
-                '<h2 style="color:black;">Circle 5</h2>' +
-              '<main>' +
-                '<p style="color:black;">This shows what is in circle 5.</p>' +
-              '</main>' +
-            '</div>' +
-          '</div>' +
-        '</li>' ,
-        ];
-
-  // Draw Circles
-
+  // scaleSize = {"place" => 10,"district" => 50, "area"=> 200}
 
   function getColor(d) {
     console.log(d);
@@ -101,75 +36,59 @@ function initMap() {
 
 }
 
-  <% @areas.each_with_index do |areaCircle, index| %>
+ // Draw Circles
+
+        // creating search_places marker clusters as below
+    var markers = [];
+      <% if @search_places != nil %>
+        var infowindow_of_each_marker = new Array(<%=@search_places.count%>);
+        <% @search_places.each_with_index do |place_result, index| %>
 
 
-    <% crowdlevel = areaCircle.crowd_levels.where(hour: 6,day: "Friday") %>
-    <% density = (crowdlevel.first).crowd_density %>
-    console.log(<%= density %>);
+        // populating infowindow
 
-     var coordinates = {lat: <%= areaCircle.lat %>,lng: <%= areaCircle.lng %>};
-
-     // var crowdDensityCircle = new google.maps.Circle({
-     //      strokeColor: '#FF0000',
-     //      strokeOpacity: 0.8,
-     //      strokeWeight: 3,
-     //      fillColor: '#FF0000',
-     //      fillOpacity: 0.35,
-     //      map: map,
-     //      center: coordinates,
-     //      radius: Math.random()*5000
-     //  });
-
-
-        var existingCrowdDensityCircle = {
-            path: google.maps.SymbolPath.CIRCLE,
-            strokeColor: getColor(<%= density %>),
-            strokeOpacity: 0.8,
-            strokeWeight: 3,
-            fillColor: getColor(<%= density %>),
-            fillOpacity: 0.35,
-            // adjust scale
-            scale: 20
-
-        };
-
-
-
-        var newCrowdDensityCircle_<%=index%> = new google.maps.Marker({
-        icon: existingCrowdDensityCircle,
-        position: coordinates
-        });
-
-        var contentString = contentArray[<%= index %>];
-
-        var infowindow_<%= index %> = new google.maps.InfoWindow({
-          content: contentString
-        });
-
-        newCrowdDensityCircle_<%=index%>.setMap(map);
-
-        newCrowdDensityCircle_<%=index%>.addListener('click', function() {
-          infowindow_<%= index %>.open(map, newCrowdDensityCircle_<%=index%>);
-        });
-
+        <% mostcr_str = "" %>
+        <% most_crowded_times = place_result.most_crowded %>
+        <% most_crowded_times.each do |h| %>
+          <% mostcr_str += h[:hour].to_s + ":00 on " + h[:day] %>
+          <% mostcr_str += ", <br/> " if most_crowded_times.count > 1 %>
         <% end %>
 
-        // creating search_place marker clusters as below
-    var markers = [];
-      <% if @search_place != nil %>
-        var infowindow_of_each_marker = new Array(<%=@search_place.count%>)
-        <% @search_place.each_with_index do |search_place, index| %>
+        // repeat above for least crowded
 
         infowindow_of_each_marker[<%=index%>] =
-          '<div>Place: <%=search_place.name%> </div>' +
-          '<div>Address: <%=search_place.address%></div>'
 
+        '<li class="map-marker map-marker-<%= index %>">' +
+           '<div class="map-marker-info">' +
+             '<div class="map-marker-info-inner animate-bounce-in">' +
+                 '<div><h2 style="color:black;">Place: <%=place_result.name%></h2> </div>' +
+               '<main>' +
+                 '<p style="color:black;">' +
+                   '<div><b>Address:</b> <%=place_result.address%></div>' +
+                    // Area
+                    // District
+                    '<div><b>Most Crowded Times:</b> <%= mostcr_str %> </div>' +
+                    // leastcrowded
+                 '</p>' + 
+               '</main>' +
+             '</div>' +
+           '</div>' +
+         '</li>';
 
-        var place_coord = {lat: <%= search_place.lat %>,lng: <%= search_place.lng %>};
+        var place_coord = {lat: <%= place_result.lat %>,lng: <%= place_result.lng %>};
 
         var marker = new google.maps.Marker({
-                position: place_coord,
+            position: place_coord,
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+            strokeColor: getColor(<%= place_result.crowd_levels.last.crowd_density %>),
+            strokeOpacity: 0.8,
+            strokeWeight: 3,
+            fillColor: getColor(<%= place_result.crowd_levels.last.crowd_density %>),
+            fillOpacity: 0.35,
+            scale: 20
+                        }
+
         });
 
         google.maps.event.addListener(marker, 'click', function(evt) {
@@ -206,6 +125,7 @@ div{
 .gm-style-iw {
   width: 100px;
   height: 100px;
+  padding-top:15px;
 }
 </style>
 
