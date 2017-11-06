@@ -57,13 +57,23 @@ function initMap() {
         // repeat above for least crowded
 
         infowindow_of_each_marker[<%=index%>] =
-          '<div>Place: <%=place_result.name%> </div>' +
-          '<div>Address: <%=place_result.address%></div>' +
-          // Area
-          // District
-          '<div>Most Crowded Times: <%= mostcr_str %> </div>';
-          // leastcrowded
 
+        '<li class="map-marker map-marker-<%= index %>">' +
+           '<div class="map-marker-info">' +
+             '<div class="map-marker-info-inner animate-bounce-in">' +
+                 '<div><h2 style="color:black;">Place: <%=place_result.name%></h2> </div>' +
+               '<main>' +
+                 '<p style="color:black;">' +
+                   '<div><b>Address:</b> <%=place_result.address%></div>' +
+                    // Area
+                    // District
+                    '<div><b>Most Crowded Times:</b> <%= mostcr_str %> </div>' +
+                    // leastcrowded
+                 '</p>' + 
+               '</main>' +
+             '</div>' +
+           '</div>' +
+         '</li>';
 
         var place_coord = {lat: <%= place_result.lat %>,lng: <%= place_result.lng %>};
 
@@ -115,6 +125,7 @@ div{
 .gm-style-iw {
   width: 100px;
   height: 100px;
+  padding-top:15px;
 }
 </style>
 

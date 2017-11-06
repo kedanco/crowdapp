@@ -19,33 +19,14 @@
 
 }
 
-.navbar{
-
-  position:sticky;
-  top:0;
-  left:0;
-  margin-bottom: 0px;
-
-}
-
 
 html, body {
   height: 100%;
-
 }
 
-#output_to_map_from_js{
-
-  height:100%;
-
-
-}
 
 #output_to_map_from_js{
-
   height:100%;
-
-
 }
 
 // info window
@@ -110,7 +91,7 @@ svg {
   max-width: 100%;
 }
 
-// Heplers
+// Helpers
 
 .text-center {
   text-align: center;
@@ -133,7 +114,6 @@ svg {
 
 // Map
 
-
     header {
       border-radius: .5em .5em 0 0;
 
@@ -148,6 +128,10 @@ svg {
 
     h2 {
       margin-bottom: 0;
+    }
+
+    li{
+      list-style-type: none;
     }
 
 // Animations
