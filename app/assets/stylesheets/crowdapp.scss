@@ -6,13 +6,11 @@
 
 #mapBody{
   height:100%;
-
-
 }
 
 .navbar{
 
-  position:sticky;
+  position:static;
   top:0;
   left:0;
   margin-bottom: 0px;
@@ -23,7 +21,6 @@
 html, body {
   height: 100%;
 }
-
 
 #output_to_map_from_js{
   height:100%;
