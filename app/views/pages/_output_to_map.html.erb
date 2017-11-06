@@ -6,7 +6,6 @@
 
 <script type="text/javascript">
 
-
 function initMap() {
   // Create the map.
   var map = new google.maps.Map(document.getElementById('map'), {
@@ -22,28 +21,27 @@ function initMap() {
 
   function getColor(d) {
     console.log(d);
-    return d > 1000 ? '#FF0000' :
-           d > 800  ? '#FF3300' :
-           d > 600  ? '#FF6600' :
-           d > 400  ? '#FF9900' :
-           d > 200  ? '#FFCC00' :
-           d > 100  ? '#FFFF00' :
-           d > 80   ? '#CCFF00' :
-           d > 60   ? '#99FF00' :
-           d > 40   ? '#66FF00' :
-           d > 20   ? '#33FF00' :
+    return d > 100 ? '#FF0000' :
+           d > 90  ? '#FF3300' :
+           d > 80  ? '#FF6600' :
+           d > 70  ? '#FF9900' :
+           d > 60  ? '#FFCC00' :
+           d > 50   ? '#FFFF00' :
+           d > 40   ? '#CCFF00' :
+           d > 30   ? '#99FF00' :
+           d > 20   ? '#66FF00' :
+           d > 10   ? '#33FF00' :
                       '#00FF00';
-
-}
+  }
 
  // Draw Circles
 
-        // creating search_places marker clusters as below
+    // creating search_places marker clusters as below
     var markers = [];
       <% if @search_places != nil %>
+
         var infowindow_of_each_marker = new Array(<%=@search_places.count%>);
         <% @search_places.each_with_index do |place_result, index| %>
-
 
         // populating infowindow
 
@@ -77,14 +75,22 @@ function initMap() {
 
         var place_coord = {lat: <%= place_result.lat %>,lng: <%= place_result.lng %>};
 
+        // Filter crowd level to show by datetime
+        <% @datetime_value = DateTime.now if @datetime_value == ""  %>
+        <% @datetime_value = @datetime_value.to_datetime %>
+
+        <% hour = @datetime_value.strftime("%H") %>
+        <% day = @datetime_value.strftime("%A") %>
+        <% @crowdlevel_show = place_result.crowd_levels.where(hour: hour, day: day) %>
+
         var marker = new google.maps.Marker({
             position: place_coord,
             icon: {
               path: google.maps.SymbolPath.CIRCLE,
-            strokeColor: getColor(<%= place_result.crowd_levels.last.crowd_density %>),
+            strokeColor: getColor(<%= @crowdlevel_show.first.crowd_density %>),
             strokeOpacity: 0.8,
             strokeWeight: 3,
-            fillColor: getColor(<%= place_result.crowd_levels.last.crowd_density %>),
+            fillColor: getColor(<%= @crowdlevel_show.first.crowd_density %>),
             fillOpacity: 0.35,
             scale: 20
                         }
@@ -113,7 +119,7 @@ function initMap() {
 }
 </script>
 
-<!-- make the wordings of infowindow visible -->
+  <!-- make the wordings of infowindow visible -->
 <style>
 div{
   color: black;
@@ -133,6 +139,8 @@ div{
   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
   </script>
 
-  <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPS_KEY'] %>&callback=initMap&language=en&region=SG">
-    </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPS_KEY'] %>&callback=initMap&language=en&region=SG">
+  </script>
+
+
+</div>
