@@ -70,10 +70,9 @@ function initMap() {
                '<main>' +
                  '<p style="color:black;">' +
                    '<div><b>Address:</b> <%=place_result.address%></div>' +
-                    // Area
-                    // District
+                   '<div><b>Area:</b> <%= place_result.district.area.name %></div>' +
+                   '<div><b>District:</b> <%= place_result.district.name %></div>' +                  
                     '<div><b>Most Crowded Times:</b> <%= mostcr_str %> </div>' +
-                    // leastcrowded
                     '<div><b>Least Crowded Times:</b> <%= leastcr_str %> </div>' +
                  '</p>' + 
                '</main>' +
