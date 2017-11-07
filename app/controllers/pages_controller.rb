@@ -10,17 +10,16 @@ class PagesController < ApplicationController
   end
 
   def home
-    # @areas = Area.all
-    @areas = Area.where.not(name: "east")
+    @areas = Area.all
+    # @areas = Area.where.not(name: "east")
 
     @districts = District.all
     # @district_names = ImportService.initDistrict
     # @district_names = District.select(:name)
-    
   end
 
   def output_to_map
-    @areas = Area.where.not(name: "east")
+    # @areas = Area.where.not(name: "east")
 
     @districts = District.all
 
@@ -37,12 +36,16 @@ class PagesController < ApplicationController
     if search_value != ""
       @search_places = Place.where("name ilike ?", "%#{search_value}%")
       if @search_places == []
-        # display msgbox when query database not found
-      
+        # display flash when query database not found
+        respond_to do |format|
+          format.js { flash.now[:notice] = "Search does not exist" }
+        end
       end
     else
-        # display msgbox when click blank in search
-  
+        # display flash when search is blank       
+        respond_to do |format|
+          format.js { flash.now[:notice] = "Search cannot be blank" }
+        end  
     end
 
     @search_places = @search_places.to_a

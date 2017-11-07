@@ -45,41 +45,39 @@ function initMap() {
         var infowindow_of_each_marker = new Array(<%=@search_places.count%>);
         <% @search_places.each_with_index do |place_result, index| %>
 
-          // populating infowindow
+        // populating infowindow
 
-          <% mostcr_str = "" %>
-          <% most_crowded_times = place_result.most_crowded %>
-          <% most_crowded_times.each do |h| %>
-            <% mostcr_str += h[:hour].to_s + ":00 on " + h[:day] %>
-            <% mostcr_str += ", " if most_crowded_times.count > 1 %>
-          <% end %>
+        <% mostcr_str = "" %>
+        <% most_crowded_times = place_result.most_crowded %>
+        <% most_crowded_times.each do |h| %>
+          <% mostcr_str += h[:hour].to_s + ":00 on " + h[:day] %>
+          <% mostcr_str += ", " if most_crowded_times.count > 1 %>
+        <% end %>
 
-          // repeat above for least crowded
-          <% leastcr_str = "" %>
-          <% least_crowded_times = place_result.least_crowded.reverse %>
-          <% least_crowded_times.each_with_index do |h, index| %>
-            <% leastcr_str += h[:hour].to_s + ":00 on " + h[:day] %>
-            <% break if index > 1 %>
-            <% leastcr_str += ", " if least_crowded_times.count > 1 %>
-          <% end %>
+        // repeat above for least crowded
+        <% leastcr_str = "" %>
+        <% least_crowded_times = place_result.least_crowded.reverse %>
+        <% least_crowded_times.each_with_index do |h, index| %>
+          <% leastcr_str += h[:hour].to_s + ":00 on " + h[:day] %>
+          <% break if index > 1 %>
+          <% leastcr_str += ", " if least_crowded_times.count > 1 %>
+        <% end %>
 
-          infowindow_of_each_marker[<%=index%>] =
+        infowindow_of_each_marker[<%=index%>] =
 
-          '<li class="map-marker map-marker-<%= index %>">' +
-             '<div class="map-marker-info">' +
-               '<div class="map-marker-info-inner animate-bounce-in">' +
-                   '<div><h2 style="color:black;">Place: <%=place_result.name%></h2> </div>' +
-                 '<main>' +
-                   '<p style="color:black;">' +
-                     '<div><b>Address:</b> <%=place_result.address%></div>' +
-                      // Area
-                      // District
-                      '<div><b>Most Crowded Times:</b> <%= mostcr_str %> </div>' +
-                      // leastcrowded
-                      '<div><b>Least Crowded Times:</b> <%= leastcr_str %> </div>' +
-                   '</p>' + 
-                 '</main>' +
-               '</div>' +
+        '<li class="map-marker map-marker-<%= index %>">' +
+           '<div class="map-marker-info">' +
+             '<div class="map-marker-info-inner animate-bounce-in">' +
+                 '<div><h2 style="color:black;">Place: <%=place_result.name%></h2> </div>' +
+               '<main>' +
+                 '<p style="color:black;">' +
+                   '<div><b>Address:</b> <%=place_result.address%></div>' +
+                   '<div><b>Area:</b> <%= place_result.district.area.name %></div>' +
+                   '<div><b>District:</b> <%= place_result.district.name %></div>' +                  
+                    '<div><b>Most Crowded Times:</b> <%= mostcr_str %> </div>' +
+                    '<div><b>Least Crowded Times:</b> <%= leastcr_str %> </div>' +
+                 '</p>' + 
+               '</main>' +
              '</div>' +
            '</li>';
 
