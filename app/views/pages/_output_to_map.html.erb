@@ -14,6 +14,8 @@ function initMap() {
     mapTypeId: 'roadmap'
   });
 
+  var bounds = new google.maps.LatLngBounds();
+
   var transitLayer = new google.maps.TransitLayer();
   transitLayer.setMap(map);
 
@@ -38,7 +40,7 @@ function initMap() {
 
     // creating search_places marker clusters as below
     var markers = [];
-      <% if @search_places != nil %>
+    <% if @search_places != nil %>
 
         var infowindow_of_each_marker = new Array(<%=@search_places.count%>);
         <% @search_places.each_with_index do |place_result, index| %>
@@ -77,44 +79,52 @@ function initMap() {
                  '</p>' + 
                '</main>' +
              '</div>' +
-           '</div>' +
-         '</li>';
+           '</li>';
 
-        var place_coord = {lat: <%= place_result.lat %>,lng: <%= place_result.lng %>};
+          var place_coord = {lat: <%= place_result.lat %>,lng: <%= place_result.lng %>};
 
-        // Filter crowd level to show by datetime
-        <% @datetime_value = DateTime.now if @datetime_value == ""  %>
-        <% @datetime_value = @datetime_value.to_datetime %>
+          // Filter crowd level to show by datetime
+          <% @datetime_value = DateTime.now if @datetime_value == ""  %>
+          <% @datetime_value = @datetime_value.to_datetime %>
 
-        <% hour = @datetime_value.strftime("%H") %>
-        <% day = @datetime_value.strftime("%A") %>
-        <% @crowdlevel_show = place_result.crowd_levels.where(hour: hour, day: day) %>
+          <% hour = @datetime_value.strftime("%H") %>
+          <% day = @datetime_value.strftime("%A") %>
+          <% @crowdlevel_show = place_result.crowd_levels.where(hour: hour, day: day) %>
 
-        var marker = new google.maps.Marker({
-            position: place_coord,
-            icon: {
-              path: google.maps.SymbolPath.CIRCLE,
-            strokeColor: getColor(<%= @crowdlevel_show.first.crowd_density %>),
-            strokeOpacity: 0.8,
-            strokeWeight: 3,
-            fillColor: getColor(<%= @crowdlevel_show.first.crowd_density %>),
-            fillOpacity: 0.35,
-            scale: 20
-                        }
+          var marker = new google.maps.Marker({
+              position: place_coord,
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+              strokeColor: getColor(<%= @crowdlevel_show.first.crowd_density %>),
+              strokeOpacity: 0.8,
+              strokeWeight: 3,
+              fillColor: getColor(<%= @crowdlevel_show.first.crowd_density %>),
+              fillOpacity: 0.35,
+              scale: 20
+                          }
 
-        });
-        var infoWin = new google.maps.InfoWindow();
+          });
+          var infoWin = new google.maps.InfoWindow();
 
-        google.maps.event.addListener(marker, 'click', function(evt) {
-          infoWin.close;
-          infoWin.setContent(infowindow_of_each_marker[<%=index%>]);
-          infoWin.open(map, this);       
-        })
+          var placeLatLng = new google.maps.LatLng(place_coord);
+          bounds.extend(placeLatLng);
 
-        markers.push(marker);
-            
+          google.maps.event.addListener(marker, 'click', function(evt) {
+            infoWin.close;
+            infoWin.setContent(infowindow_of_each_marker[<%=index%>]);
+            infoWin.open(map, this);       
+          })
+
+          markers.push(marker);
         <% end %>
-      <% end %>
+      
+    <% else %>
+      var placeLatLng = new google.maps.LatLng({lat: 1.350452, lng:103.820581})
+      bounds.extend(placeLatLng);
+      map.setZoomLevel(12);
+    <% end %>
+
+    map.fitBounds(bounds);
 
     var options = {
             imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'

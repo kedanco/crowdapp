@@ -1,11 +1,11 @@
 #map{
-  height: 100%;
+  height:100%;
   max-width:none;
 
 }
 
 #mapBody{
-  height:100%;
+  height:94.5%;
 }
 
 .navbar{
@@ -20,6 +20,7 @@
 
 html, body {
   height: 100%;
+  overflow-y: hidden;
 }
 
 #output_to_map_from_js{
