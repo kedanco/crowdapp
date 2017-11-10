@@ -1,15 +1,25 @@
 class QueryService
 
+  def self.hour_24_to_12(hour_24)
+    hour_12 = hour_24 - 12
 
-  def findDistrict(num)
+    if hour_12 == 0
+      return "12PM"
 
-    # places_in_district = Place.all.where(district: num)
+    elsif hour_12 == -12
+      return "12AM"
 
-  end
+    elsif hour_12 > 0
+      return "#{hour_12}PM"
 
-  def findArea(areaName)
+    elsif hour_12 < 0
+      return "#{hour_24}AM"
 
-    # places_in_area = Place.where(area: areaName)
+    else
+      # The passed-in time is outside the range o 0-23,
+      # so you may need to deal with this however you
+      # feel is appropriate
+    end
 
   end
 

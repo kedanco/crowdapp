@@ -4,6 +4,8 @@
 
 </div>
 
+
+
 <script type="text/javascript">
 
 function initMap() {
@@ -22,7 +24,6 @@ function initMap() {
   // scaleSize = {"place" => 10,"district" => 50, "area"=> 200}
 
   function getColor(d) {
-    console.log(d);
     return d > 100 ? '#FF0000' :
            d > 90  ? '#FF3300' :
            d > 80  ? '#FF6600' :
@@ -40,6 +41,7 @@ function initMap() {
 
     // creating search_places marker clusters as below
     var markers = [];
+    
     <% if @search_places != nil %>
 
         var infowindow_of_each_marker = new Array(<%=@search_places.count%>);
@@ -50,7 +52,9 @@ function initMap() {
         <% mostcr_str = "" %>
         <% most_crowded_times = place_result.most_crowded %>
         <% most_crowded_times.each do |h| %>
-          <% mostcr_str += h[:hour].to_s + ":00 on " + h[:day] %>
+
+          <% converted_hour = QueryService.hour_24_to_12(h[:hour]) %>
+          <% mostcr_str += converted_hour + " on " + h[:day] %>
           <% mostcr_str += ", " if most_crowded_times.count > 1 %>
         <% end %>
 
@@ -58,9 +62,10 @@ function initMap() {
         <% leastcr_str = "" %>
         <% least_crowded_times = place_result.least_crowded.reverse %>
         <% least_crowded_times.each_with_index do |h, index| %>
-          <% leastcr_str += h[:hour].to_s + ":00 on " + h[:day] %>
+          <% converted_hour = QueryService.hour_24_to_12(h[:hour]) %>
+          <% leastcr_str += converted_hour + " on " + h[:day] %>
           <% break if index > 1 %>
-          <% leastcr_str += ", " if least_crowded_times.count > 1 %>
+          <% leastcr_str += ", " if (least_crowded_times.count == 2 && index==0) || (least_crowded_times.count > 2) %>
         <% end %>
 
         infowindow_of_each_marker[<%=index%>] =
@@ -119,36 +124,60 @@ function initMap() {
         <% end %>
 
     <% else %>
-      var placeLatLng = new google.maps.LatLng({lat: 1.350452, lng:103.820581})
-      bounds.extend(placeLatLng);
-      map.setZoomLevel(12);
+      
+      var placeLatLng = new google.maps.LatLng({lat: 1.350452, lng:103.820581});
+      map.setCenter(placeLatLng);
+      map.setZoom(12);
+      
     <% end %>
 
-    map.fitBounds(bounds);
+    (markers.length != 0) ? map.fitBounds(bounds) : '' ;
 
     var options = {
             imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
     };
 
     var markerCluster = new MarkerClusterer(map, markers, options);
+
+
+    // function showNearbyRestaurants(){
+    // change mouse icon to marker
+
+      // google.maps.event.addListener(map, 'click', function(event) {
+      //   alert(event.latLng.lat() + ", " + event.latLng.lng());
+      //   placeMarker(event.latLng);
+      // });
+
+      // function placeMarker(location) {
+      //   var marker = new google.maps.Marker({
+      //       position: location, 
+      //       map: map
+      //   });
+
+      //   map.setCenter(location);
+      // }
+
+    // };
+
+    // Enter key > Submit Button
+    document.addEventListener("keyup", event => {
+      if(event.key !== "Enter") return; // Use `.key` instead.
+      document.querySelector("#submit-area-search-datetime-crowdlevel").click(); // Things you want to do.
+      event.preventDefault(); // No need to `return false;`.
+    });
+
 }
 </script>
 
-  <!-- make the wordings of infowindow visible -->
-<style>
-div{
-  color: black;
-}
-</style>
+<script type="text/javascript">
+$(document).ready(function(){
+  setTimeout(function(){
+    $('.alert-box').slideUp();
+  }, 4000);
+ })
+</script>
 
-<!-- this is for sizing the infowindow as below -->
-<style>
-.gm-style-iw {
-  width: 100px;
-  min-height: 100px;
-  padding-top:15px;
-}
-</style>
+
 
 <!-- this is needed for the markercluster -->
   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
