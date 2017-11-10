@@ -77,7 +77,7 @@ function initMap() {
                       '<div><b>Most Crowded Times:</b> <%= mostcr_str %> </div>' +
                       // leastcrowded
                       '<div><b>Least Crowded Times:</b> <%= leastcr_str %> </div>' +
-                   '</p>' + 
+                   '</p>' +
                  '</main>' +
                '</div>' +
              '</div>' +
@@ -114,12 +114,12 @@ function initMap() {
           google.maps.event.addListener(marker, 'click', function(evt) {
             infoWin.close;
             infoWin.setContent(infowindow_of_each_marker[<%=index%>]);
-            infoWin.open(map, this);       
+            infoWin.open(map, this);
           })
 
           markers.push(marker);
         <% end %>
-      
+
     <% else %>
       var placeLatLng = new google.maps.LatLng({lat: 1.350452, lng:103.820581})
       bounds.extend(placeLatLng);
@@ -148,8 +148,7 @@ div{
 .gm-style-iw {
   width: 100px;
   min-height: 100px;
-  height: 100%;
-  padding-top:15px;  
+  padding-top:15px;
 }
 </style>
 
