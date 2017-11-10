@@ -1,13 +1,9 @@
 <% if notice != nil %>
-<div data-alert class="alert-box">
+<div data-alert class="alert alert-box">
   <%= notice %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span id="closex" aria-hidden="true">&times;</span>
+        </button>
 </div>
 <% end %>
 
-<style>
-.alert-box {
-    padding: 20px;
-    background-color: #f44336;
-    color: white;
-}
-</style>
