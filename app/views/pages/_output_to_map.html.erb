@@ -1,10 +1,14 @@
 <div id="mapBody">
 
-  <div id="map"></div>
+  <div id="map">
 
+
+
+  </div>
 </div>
 
 <script type="text/javascript">
+
 
 function initMap() {
   // Create the map.
@@ -35,6 +39,9 @@ function initMap() {
            d > 10   ? '#33FF00' :
                       '#00FF00';
   }
+
+
+
 
  // Draw Circles
 
@@ -82,6 +89,7 @@ function initMap() {
                '</div>' +
              '</div>' +
            '</li>';
+
 
           var place_coord = {lat: <%= place_result.lat %>,lng: <%= place_result.lng %>};
 
@@ -134,7 +142,14 @@ function initMap() {
 
     var markerCluster = new MarkerClusterer(map, markers, options);
 }
+
+
+
+
+
+
 </script>
+
 
   <!-- make the wordings of infowindow visible -->
 <style>
