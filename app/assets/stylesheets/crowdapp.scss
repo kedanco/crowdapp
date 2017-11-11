@@ -17,14 +17,33 @@
 
 }
 
-
 html, body {
   height: 100%;
   overflow-y: hidden;
 }
 
+// make the wordings of infowindow visible
+#map div{
+  color: black;
+}
+
 #output_to_map_from_js{
   height:100%;
+}
+
+
+// this is for sizing the infowindow as below
+.gm-style-iw {
+  width: 100px;
+  min-height: 100px;
+  padding-top:15px;
+  overflow-x: hidden;
+}
+
+// hide temporary scrollbar during infowindow animation
+.gm-style-iw *{
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 // info window
