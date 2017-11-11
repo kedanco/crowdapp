@@ -1,12 +1,16 @@
 <div id="mapBody">
 
-  <div id="map"></div>
+  <div id="map">
 
+
+
+  </div>
 </div>
 
 
 
 <script type="text/javascript">
+
 
 function initMap() {
   // Create the map.
@@ -36,6 +40,9 @@ function initMap() {
            d > 10   ? '#33FF00' :
                       '#00FF00';
   }
+
+
+
 
  // Draw Circles
 
@@ -85,6 +92,7 @@ function initMap() {
                '</main>' +
              '</div>' +
            '</li>';
+
 
           var place_coord = {lat: <%= place_result.lat %>,lng: <%= place_result.lng %>};
 
@@ -167,7 +175,31 @@ function initMap() {
     });
 
 }
+
+
+
+
+
+
 </script>
+
+
+
+  <!-- make the wordings of infowindow visible -->
+<style>
+div{
+  color: black;
+}
+</style>
+
+<!-- this is for sizing the infowindow as below -->
+<style>
+.gm-style-iw {
+  width: 100px;
+  min-height: 100px;
+  padding-top:15px;
+}
+</style>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -176,6 +208,7 @@ $(document).ready(function(){
   }, 4000);
  })
 </script>
+
 
 
 
