@@ -19,7 +19,7 @@
 
       <%= form_tag("/output_to_map", method: :post, class: "output_to_map_from_area", remote: :true, authenticity_token: :true) do %>
 
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav" data-turbolinks="false">
 
         <li class="navbar-form">
           <input type="text" class="form-control" placeholder="Search" name="search_result">
@@ -70,7 +70,7 @@
 
           <label for="button_for_Notcrowded" class="btn btn-default notcrowded"><i class="ionicons ion-ios-person"></i>Not Crowded</label>
           <input id="button_for_Notcrowded" type="checkbox" name="crowdlevel[]" value="not_crowded" class="button_for_CrowdLevel hidden" />
-          <button id="submit-area-search-datetime-crowdlevel" type="submit" class="btn btn-default" data-turbolinks="false">Submit</button>
+          <button id="submit-area-search-datetime-crowdlevel" type="submit" class="btn btn-default">Submit</button>
         </li>
       </ul>
 

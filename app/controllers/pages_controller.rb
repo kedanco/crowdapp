@@ -34,7 +34,10 @@ class PagesController < ApplicationController
     # Get search results
 
     if search_value != ""
+      # have different queries and chain .where statements
+      # combine different statements with && together
       @search_places = Place.where("name ilike ?", "%#{search_value}%")
+      
       if @search_places == []
         # display flash when query database not found
         respond_to do |format|
