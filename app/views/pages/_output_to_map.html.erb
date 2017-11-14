@@ -5,6 +5,9 @@
 
 
   </div>
+
+  <div id="legend"><h3>Legend</h3></div>
+
 </div>
 
 
@@ -40,8 +43,6 @@ function initMap() {
            d > 10   ? '#33FF00' :
                       '#00FF00';
   }
-
-
 
 
  // Draw Circles
@@ -97,12 +98,7 @@ function initMap() {
           var place_coord = {lat: <%= place_result.lat %>,lng: <%= place_result.lng %>};
 
           // Filter crowd level to show by datetime
-          <% @datetime_value = DateTime.now if @datetime_value == ""  %>
-          <% @datetime_value = @datetime_value.to_datetime %>
-
-          <% hour = @datetime_value.strftime("%H") %>
-          <% day = @datetime_value.strftime("%A") %>
-          <% @crowdlevel_show = place_result.crowd_levels.where(hour: hour, day: day) %>
+          <% @crowdlevel_show = place_result.crowd_levels.where(hour: @hour, day: @day) %>
 
           var marker = new google.maps.Marker({
               position: place_coord,
@@ -177,47 +173,27 @@ function initMap() {
 }
 
 
-
-
-
-
 </script>
 
-
-
-  <!-- make the wordings of infowindow visible -->
-<style>
-div{
-  color: black;
-}
-</style>
-
-<!-- this is for sizing the infowindow as below -->
-<style>
-.gm-style-iw {
-  width: 100px;
-  min-height: 100px;
-  padding-top:15px;
-}
-</style>
 
 <script type="text/javascript">
-$(document).ready(function(){
-  setTimeout(function(){
-    $('.alert-box').slideUp();
-  }, 4000);
- })
-</script>
 
+  $(document).ready(function(){
+    setTimeout(function(){
+      $('.alert-box').slideUp();
+    }, 4000);
+   })
+
+</script>
 
 
 
 <!-- this is needed for the markercluster -->
-  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
-  </script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+</script>
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPS_KEY'] %>&callback=initMap&language=en&region=SG">
-  </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPS_KEY'] %>&callback=initMap&language=en&region=SG">
+</script>
 
 
 </div>

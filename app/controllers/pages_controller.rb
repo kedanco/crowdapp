@@ -25,7 +25,7 @@ class PagesController < ApplicationController
 
     search_value = params[:search_result]
     area_value = params[:area_checkbox]
-    crowdlevel_value = params[:crowdlevel]
+    crowdlevel_value = params[:crowdlevel]&.first
     @datetime_value = params[:date_time]
     @crowdlevel_show
 
@@ -62,27 +62,34 @@ class PagesController < ApplicationController
 
     end
 
+    #Date time filters 
+    @datetime_value = DateTime.now if @datetime_value == ""
+    @datetime_value = @datetime_value.to_datetime
 
-    # Crowded/Not Crowded Filter
-    # if crowdlevel_value != nil
+    @hour = @datetime_value.strftime("%H")
+    @day = @datetime_value.strftime("%A")
 
-    #   @search_places.delete_if{|place|
+    # Crowded /  Not Crowded Filter
+    if crowdlevel_value != nil
 
-    #     cl = place.crowd_levels
-    #     average_density = (cl.sum(:crowd_density)/cl.count)
+      @search_places.delete_if{|place|
 
-    #       if crowdlevel_value == crowded
+        crowd = place.crowd_levels.where(hour: @hour, day: @day)
+        density = crowd.first.crowd_density
 
-    #         crowd_level.crowd_density < 75
+        if crowdlevel_value == 'crowded'
 
-    #       elsif crowdlevel_value == not_crowded
+         p density < 75
+         
+        elsif crowdlevel_value == 'not_crowded'
 
-    #         crowd_level.crowd_density > 25
+         p density > 25
 
-    #       end
-    #   }
+        end
+        
+      }
 
-    # end  
+    end  
 
     respond_to do |format|
       format.js   
