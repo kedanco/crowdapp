@@ -6,8 +6,27 @@
 
   </div>
 
-  <div id="legend"><h3>Legend</h3></div>
+  <!-- <div id="legend"><h3>Legend</h3></div> -->
 
+  <div class='my-legend'>
+<div class='legend-title'>Legend</div>
+<div class='legend-scale'>
+  <ul class='legend-labels'>
+    <li><span style='background:#FF0000;'></span> > 100% </li>
+    <li><span style='background:#FF3300;'></span> > 90% </li>
+    <li><span style='background:#FF6600;'></span> > 80% </li>
+    <li><span style='background:#FF9900;'></span> > 70% </li>
+    <li><span style='background:#FFCC00;'></span> > 60% </li>
+    <li><span style='background:#FFFF00;'></span> > 50% </li>
+    <li><span style='background:#CCFF00;'></span> > 40% </li>
+    <li><span style='background:#99FF00;'></span> > 30% </li>
+    <li><span style='background:#66FF00;'></span> > 20% </li>
+    <li><span style='background:#33FF00;'></span> > 10% </li>
+    <li><span style='background:#00FF00;'></span> > 0% </li>
+
+  </ul>
+</div>
+</div>
 </div>
 
 
@@ -49,7 +68,7 @@ function initMap() {
 
     // creating search_places marker clusters as below
     var markers = [];
-    
+
     <% if @search_places != nil %>
 
         var infowindow_of_each_marker = new Array(<%=@search_places.count%>);
@@ -86,10 +105,10 @@ function initMap() {
                  '<p style="color:black;">' +
                    '<div><b>Address:</b> <%=place_result.address%></div>' +
                    '<div style="text-transform:capitalize;"><b>Area:</b> <%= place_result.district.area.name %></div>' +
-                   '<div><b>District:</b> <%= place_result.district.name %></div>' +                  
+                   '<div><b>District:</b> <%= place_result.district.name %></div>' +
                     '<div><b>Most Crowded Times:</b> <%= mostcr_str %> </div>' +
                     '<div><b>Least Crowded Times:</b> <%= leastcr_str %> </div>' +
-                 '</p>' + 
+                 '</p>' +
                '</main>' +
              '</div>' +
            '</li>';
@@ -128,11 +147,11 @@ function initMap() {
         <% end %>
 
     <% else %>
-      
+
       var placeLatLng = new google.maps.LatLng({lat: 1.350452, lng:103.820581});
       map.setCenter(placeLatLng);
       map.setZoom(12);
-      
+
     <% end %>
 
     (markers.length != 0) ? map.fitBounds(bounds) : '' ;
@@ -154,7 +173,7 @@ function initMap() {
 
       // function placeMarker(location) {
       //   var marker = new google.maps.Marker({
-      //       position: location, 
+      //       position: location,
       //       map: map
       //   });
 
