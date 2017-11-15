@@ -19,13 +19,13 @@
 
       <%= form_tag("/output_to_map", method: :post, class: "output_to_map_from_area", remote: :true, authenticity_token: :true) do %>
 
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav" data-turbolinks="false">
 
         <li class="navbar-form">
           <input type="text" class="form-control" placeholder="Search" name="search_result">
         </li>
 
-        <li class="dropdown area-dropdown-list" data-turbolinks="false">
+        <li class="dropdown area-dropdown-list" >
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Area <span class="caret"></span></a>
 
           <ul class="dropdown-menu list-area-checkbox">
